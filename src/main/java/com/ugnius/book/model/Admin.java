@@ -11,7 +11,6 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 public class Admin extends User {
-
     private String phoneNum;
 
 }

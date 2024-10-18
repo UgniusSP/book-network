@@ -1,24 +1,23 @@
 package com.ugnius.book.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = "users")
+@Table(name = "publications")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @SuperBuilder
-public abstract class User {
+public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
-    @Column(unique = true)
-    protected String username;
-    protected String password;
-    protected String name;
-    protected String surname;
-
+    protected String title;
+    protected String author;
 }
