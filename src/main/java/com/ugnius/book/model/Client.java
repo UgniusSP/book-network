@@ -15,5 +15,4 @@ import java.time.LocalDate;
 public class Client extends User {
     private String address;
     private LocalDate birthdate;
-
 }

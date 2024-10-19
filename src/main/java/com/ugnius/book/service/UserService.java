@@ -19,6 +19,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public void createUser(UserDto userDto) {
         if(userRepository.findByUsername(userDto.getUsername()).isPresent()){
             throw new IllegalArgumentException("User already exists");
@@ -32,6 +33,7 @@ public class UserService {
                     .surname(userDto.getSurname())
                     .address(userDto.getAddress())
                     .birthdate(userDto.getBirthdate())
+                    .userType(String.valueOf(CLIENT))
                     .build();
 
             userRepository.save(client);
@@ -42,10 +44,12 @@ public class UserService {
                     .name(userDto.getName())
                     .surname(userDto.getSurname())
                     .phoneNum(userDto.getPhoneNum())
+                    .userType(String.valueOf(ADMIN))
                     .build();
 
             userRepository.save(admin);
         }
+
 
     }
 

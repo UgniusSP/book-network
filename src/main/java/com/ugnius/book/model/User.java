@@ -20,5 +20,6 @@ public abstract class User {
     protected String password;
     protected String name;
     protected String surname;
+    protected String userType;
 
 }
