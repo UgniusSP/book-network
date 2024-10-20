@@ -1,13 +1,6 @@
 import { UserModel } from "../models/UserModel";
 
-export interface User {
-    username: string;
-    name: string;
-    surname: string;
-    userType: string;
-}
-
-export const fetchAllUsers = async (): Promise<User[]> => {
+export const fetchAllUsers = async (): Promise<UserModel[]> => {
     const response = await fetch("http://localhost:8080/users");
     if (!response.ok) {
         throw new Error("Failed to fetch users");
@@ -38,5 +31,19 @@ export const deleteUser = async (username: any) => {
         throw new Error('Failed to delete user');
     }
 };
+
+export const updateUser = async (username: any, user: UserModel) => {
+    const response = await fetch(`http://localhost:8080/users/${username}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+    });
+
+    if (!response.ok) {
+        throw new Error('Failed to update user');
+    }
+}
 
 

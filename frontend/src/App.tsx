@@ -9,7 +9,7 @@ const App: React.FC = () => {
         <Router>
             <div className="flex">
                 <Sidebar />
-                <div className="flex-1 p-4">
+                <div className="flex-1 ml-64 p-4">
                     <Routes>
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/users" element={<Users />} />

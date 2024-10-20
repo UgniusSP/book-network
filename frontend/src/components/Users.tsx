@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllUsers, createUser, deleteUser, User } from "../api/UserApi";
+import { fetchAllUsers, createUser, deleteUser, updateUser} from "../api/UserApi";
 import { UserModel } from "../models/UserModel";
 
 const UsersPage: React.FC = () => {
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<UserModel[]>([]);
     const [userDto, setUserDto] = useState<UserModel>({
         username: "",
         address: "",
@@ -39,23 +39,13 @@ const UsersPage: React.FC = () => {
         }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             await createUser(userDto);
             setSuccessMessage("User created successfully!");
             setFormError(null);
-            setUserDto({
-                username: "",
-                address: "",
-                birthdate: "",
-                name: "",
-                password: "",
-                phoneNum: "",
-                surname: "",
-                userType: "CLIENT",
-            });
-
+            resetForm();
             const updatedUsers = await fetchAllUsers();
             setUsers(updatedUsers);
         } catch (error: any) {
@@ -64,16 +54,55 @@ const UsersPage: React.FC = () => {
         }
     };
 
-    const handleDelete = async (username: string) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-        if (confirmDelete) {
-            try {
-                await deleteUser(username); // Call the API to delete the user
-                setUsers(users.filter((user) => user.username !== username)); // Update local state
-            } catch (error) {
-                setError((error as Error).message);
-            }
+    const handleUpdateUser = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            await updateUser(userDto.username, userDto);
+            setSuccessMessage("User updated successfully!");
+            setFormError(null);
+            resetForm();
+            const updatedUsers = await fetchAllUsers();
+            setUsers(updatedUsers);
+        } catch (error: any) {
+            setFormError(error.message);
+            setSuccessMessage(null);
         }
+    };
+
+    const resetForm = () => {
+        setUserDto({
+            username: "",
+            address: "",
+            birthdate: "",
+            name: "",
+            password: "",
+            phoneNum: "",
+            surname: "",
+            userType: "CLIENT",
+        });
+    };
+
+    const handleDelete = async (username: string) => {
+        try {
+            await deleteUser(username);
+            setSuccessMessage("User deleted successfully!");
+            setUsers(users.filter((user) => user.username !== username)); // Update local state
+        } catch (error) {
+            setError((error as Error).message);
+        }
+    };
+
+    const handleEdit = (user: UserModel) => {
+        setUserDto({
+            username: user.username,
+            address: user.address ?? "",
+            birthdate: user.birthdate ?? "",
+            name: user.name,
+            password: user.password,
+            phoneNum: user.phoneNum ?? "",
+            surname: user.surname,
+            userType: user.userType,
+        });
     };
 
     return (
@@ -82,7 +111,7 @@ const UsersPage: React.FC = () => {
             {successMessage && <p className="text-green-500">{successMessage}</p>}
             {formError && <p className="text-red-500">{formError}</p>}
 
-            <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-6 py-4 mb-4">
+            <form className="bg-white shadow-md rounded px-6 py-4 mb-4">
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">User Type</label>
                     <div className="flex items-center mb-4">
@@ -207,10 +236,24 @@ const UsersPage: React.FC = () => {
                 </div>
 
                 <div className="mt-3 text-right">
-                    <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded focus:outline-none">
-                        Create User
-                    </button>
+                    <div className="flex justify-end space-x-2">
+                            <button
+                                type="submit"
+                                onClick={handleUpdateUser}
+                                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded focus:outline-none"
+                            >
+                                Update User
+                            </button>
+                        <button
+                            type="submit"
+                            onClick={handleCreateUser}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded focus:outline-none"
+                        >
+                            Create User
+                        </button>
+                    </div>
                 </div>
+
             </form>
 
             <h1 className="text-2xl font-bold mb-4 text-center">All Users</h1>
@@ -230,7 +273,8 @@ const UsersPage: React.FC = () => {
                         <tbody>
                         {users.map((user, index) => (
                             <tr key={user.username}
-                                className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-blue-100 transition-colors duration-200`}>
+                                className={`${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-blue-100 transition-colors duration-200`}
+                                onClick={() => handleEdit(user)}>
                                 <td className="py-2 px-4 border-b">{user.name}</td>
                                 <td className="py-2 px-4 border-b">{user.surname}</td>
                                 <td className="py-2 px-4 border-b">{user.userType}</td>
