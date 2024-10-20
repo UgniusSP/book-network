@@ -1,6 +1,6 @@
-import { UserModel } from "../models/UserModel";
+import { UserDto } from "../models/UserDto";
 
-export const fetchAllUsers = async (): Promise<UserModel[]> => {
+export const getAllUsers = async (): Promise<UserDto[]> => {
     const response = await fetch("http://localhost:8080/users");
     if (!response.ok) {
         throw new Error("Failed to fetch users");
@@ -8,7 +8,7 @@ export const fetchAllUsers = async (): Promise<UserModel[]> => {
     return await response.json();
 };
 
-export const createUser = async (user: UserModel): Promise<void> => {
+export const createUser = async (user: UserDto): Promise<void> => {
     const response = await fetch("http://localhost:8080/users/create", {
         method: "POST",
         headers: {
@@ -32,7 +32,7 @@ export const deleteUser = async (username: any) => {
     }
 };
 
-export const updateUser = async (username: any, user: UserModel) => {
+export const updateUser = async (username: any, user: UserDto) => {
     const response = await fetch(`http://localhost:8080/users/${username}`, {
         method: 'PUT',
         headers: {

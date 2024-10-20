@@ -14,14 +14,13 @@ public class PublicationDto {
     private String author;
     private String publisher;
     private String isbn;
-    private Genre genre;
+    private String genre;
     private int pageCount;
-    private Language language;
-    private int publicationYear;
-    private Format format;
+    private String language;
+    private String format;
     private String summary;
     private int issueNumber;
     private LocalDate publicationDate;
     private String editor;
-    private Frequency frequency;
+    private String frequency;
 }

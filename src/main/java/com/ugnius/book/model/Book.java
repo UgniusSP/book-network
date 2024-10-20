@@ -1,8 +1,5 @@
 package com.ugnius.book.model;
 
-import com.ugnius.book.enums.Format;
-import com.ugnius.book.enums.Genre;
-import com.ugnius.book.enums.Language;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,13 +14,10 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 public class Book extends Publication {
-    private String publisher;
     private String isbn;
-    private Genre genre;
+    private String genre;
     private int pageCount;
-    private Language language;
-    private int publicationYear;
-    private Format format;
+    private String format;
     private String summary;
 
 }

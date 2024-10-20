@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { fetchAllUsers, createUser, deleteUser, updateUser} from "../api/UserApi";
-import { UserModel } from "../models/UserModel";
+import { getAllUsers, createUser, deleteUser, updateUser} from "../api/UserApi";
+import { UserDto } from "../models/UserDto";
 
 const UsersPage: React.FC = () => {
-    const [users, setUsers] = useState<UserModel[]>([]);
-    const [userDto, setUserDto] = useState<UserModel>({
+    const [users, setUsers] = useState<UserDto[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [formError, setFormError] = useState<string | null>(null);
+    const [userModel, setUserModel] = useState<UserDto>({
         username: "",
         address: "",
         birthdate: "",
@@ -14,14 +17,11 @@ const UsersPage: React.FC = () => {
         surname: "",
         userType: "CLIENT",
     });
-    const [error, setError] = useState<string | null>(null);
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
-    const [formError, setFormError] = useState<string | null>(null);
 
     useEffect(() => {
         const loadUsers = async () => {
             try {
-                const usersData = await fetchAllUsers();
+                const usersData = await getAllUsers();
                 setUsers(usersData);
             } catch (error: any) {
                 setError(error.message);
@@ -31,22 +31,14 @@ const UsersPage: React.FC = () => {
         loadUsers();
     }, []);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setUserDto((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    };
-
     const handleCreateUser = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await createUser(userDto);
+            await createUser(userModel);
             setSuccessMessage("User created successfully!");
             setFormError(null);
             resetForm();
-            const updatedUsers = await fetchAllUsers();
+            const updatedUsers = await getAllUsers();
             setUsers(updatedUsers);
         } catch (error: any) {
             setFormError(error.message);
@@ -57,11 +49,11 @@ const UsersPage: React.FC = () => {
     const handleUpdateUser = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await updateUser(userDto.username, userDto);
+            await updateUser(userModel.username, userModel);
             setSuccessMessage("User updated successfully!");
             setFormError(null);
             resetForm();
-            const updatedUsers = await fetchAllUsers();
+            const updatedUsers = await getAllUsers();
             setUsers(updatedUsers);
         } catch (error: any) {
             setFormError(error.message);
@@ -69,31 +61,18 @@ const UsersPage: React.FC = () => {
         }
     };
 
-    const resetForm = () => {
-        setUserDto({
-            username: "",
-            address: "",
-            birthdate: "",
-            name: "",
-            password: "",
-            phoneNum: "",
-            surname: "",
-            userType: "CLIENT",
-        });
-    };
-
     const handleDelete = async (username: string) => {
         try {
             await deleteUser(username);
             setSuccessMessage("User deleted successfully!");
-            setUsers(users.filter((user) => user.username !== username)); // Update local state
+            setUsers(users.filter((user) => user.username !== username));
         } catch (error) {
             setError((error as Error).message);
         }
     };
 
-    const handleEdit = (user: UserModel) => {
-        setUserDto({
+    const handleEdit = (user: UserDto) => {
+        setUserModel({
             username: user.username,
             address: user.address ?? "",
             birthdate: user.birthdate ?? "",
@@ -105,13 +84,35 @@ const UsersPage: React.FC = () => {
         });
     };
 
+    const resetForm = () => {
+        setUserModel({
+            username: "",
+            address: "",
+            birthdate: "",
+            name: "",
+            password: "",
+            phoneNum: "",
+            surname: "",
+            userType: "CLIENT",
+        });
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUserModel((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
+
     return (
         <div className="container mx-auto p-4">
-            <h2 className="text-xl font-bold mb-4">User Management</h2>
             {successMessage && <p className="text-green-500">{successMessage}</p>}
             {formError && <p className="text-red-500">{formError}</p>}
 
-            <form className="bg-white shadow-md rounded px-6 py-4 mb-4">
+            <form className="bg-gray-100 shadow-md rounded px-6 py-4 mb-4">
+                <h2 className="text-xl font-bold mb-4">User Management</h2>
+
                 <div className="mb-4">
                     <label className="block text-gray-700 text-sm font-bold mb-2">User Type</label>
                     <div className="flex items-center mb-4">
@@ -119,8 +120,8 @@ const UsersPage: React.FC = () => {
                             type="radio"
                             name="userType"
                             value="CLIENT"
+                            checked={userModel.userType === "CLIENT"}
                             onChange={handleChange}
-                            checked={userDto.userType === "CLIENT"}
                             className="mr-2"
                         />
                         <label className="mr-4">Client</label>
@@ -129,14 +130,13 @@ const UsersPage: React.FC = () => {
                             name="userType"
                             value="ADMIN"
                             onChange={handleChange}
-                            checked={userDto.userType === "ADMIN"}
+                            checked={userModel.userType === "ADMIN"}
                             className="mr-2"
                         />
                         <label>Admin</label>
                     </div>
                 </div>
 
-                <h2 className="text-lg font-bold mb-2">User Details</h2>
                 <div className="grid grid-cols-2 gap-4">
                     <div className="col-span-1">
                         <label className="block text-sm font-bold mb-1" htmlFor="username">Username</label>
@@ -144,7 +144,7 @@ const UsersPage: React.FC = () => {
                             type="text"
                             name="username"
                             id="username"
-                            value={userDto.username}
+                            value={userModel.username}
                             onChange={handleChange}
                             className="w-full border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none"
                             required
@@ -157,7 +157,7 @@ const UsersPage: React.FC = () => {
                             type="password"
                             name="password"
                             id="password"
-                            value={userDto.password}
+                            value={userModel.password}
                             onChange={handleChange}
                             className="w-full border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none"
                             required
@@ -170,7 +170,7 @@ const UsersPage: React.FC = () => {
                             type="text"
                             name="name"
                             id="name"
-                            value={userDto.name}
+                            value={userModel.name}
                             onChange={handleChange}
                             className="w-full border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none"
                             required
@@ -183,14 +183,14 @@ const UsersPage: React.FC = () => {
                             type="text"
                             name="surname"
                             id="surname"
-                            value={userDto.surname}
+                            value={userModel.surname}
                             onChange={handleChange}
                             className="w-full border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none"
                             required
                         />
                     </div>
 
-                    {userDto.userType === "CLIENT" && (
+                    {userModel.userType === "CLIENT" && (
                         <>
                             <div className="col-span-2 mb-4">
                                 <label className="block text-sm font-bold mb-1" htmlFor="address">Address</label>
@@ -198,7 +198,7 @@ const UsersPage: React.FC = () => {
                                     type="text"
                                     name="address"
                                     id="address"
-                                    value={userDto.address}
+                                    value={userModel.address}
                                     onChange={handleChange}
                                     className="w-full border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none"
                                     required
@@ -210,7 +210,7 @@ const UsersPage: React.FC = () => {
                                     type="date"
                                     name="birthdate"
                                     id="birthdate"
-                                    value={userDto.birthdate}
+                                    value={userModel.birthdate}
                                     onChange={handleChange}
                                     className="w-full border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none"
                                     required
@@ -219,14 +219,14 @@ const UsersPage: React.FC = () => {
                         </>
                     )}
 
-                    {userDto.userType === "ADMIN" && (
+                    {userModel.userType === "ADMIN" && (
                         <div className="col-span-2 mb-4">
                             <label className="block text-sm font-bold mb-1" htmlFor="phoneNum">Phone Number</label>
                             <input
                                 type="text"
                                 name="phoneNum"
                                 id="phoneNum"
-                                value={userDto.phoneNum}
+                                value={userModel.phoneNum}
                                 onChange={handleChange}
                                 className="w-full border rounded py-1 px-2 text-gray-700 leading-tight focus:outline-none"
                                 required
@@ -237,13 +237,13 @@ const UsersPage: React.FC = () => {
 
                 <div className="mt-3 text-right">
                     <div className="flex justify-end space-x-2">
-                            <button
-                                type="submit"
-                                onClick={handleUpdateUser}
-                                className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded focus:outline-none"
-                            >
-                                Update User
-                            </button>
+                        <button
+                            type="submit"
+                            onClick={handleUpdateUser}
+                            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded focus:outline-none"
+                        >
+                            Update User
+                        </button>
                         <button
                             type="submit"
                             onClick={handleCreateUser}
@@ -284,7 +284,7 @@ const UsersPage: React.FC = () => {
                                         className="text-red-500 hover:text-red-700"
                                         title="Delete User"
                                     >
-                                        🗑️ {/* Recycle bin icon (Unicode character) */}
+                                        🗑️
                                     </button>
                                 </td>
                             </tr>

@@ -26,12 +26,11 @@ public class PublicationService {
             Book book = Book.builder()
                     .title(publicationDto.getTitle())
                     .author(publicationDto.getAuthor())
-                    .publisher(publicationDto.getPublisher())
+                    .publicationDate(publicationDto.getPublicationDate())
+                    .language(publicationDto.getLanguage())
                     .isbn(publicationDto.getIsbn())
                     .genre(publicationDto.getGenre())
                     .pageCount(publicationDto.getPageCount())
-                    .language(publicationDto.getLanguage())
-                    .publicationYear(publicationDto.getPublicationYear())
                     .format(publicationDto.getFormat())
                     .summary(publicationDto.getSummary())
                     .build();
@@ -41,11 +40,11 @@ public class PublicationService {
             Periodical periodical = Periodical.builder()
                     .title(publicationDto.getTitle())
                     .author(publicationDto.getAuthor())
-                    .issueNumber(publicationDto.getIssueNumber())
                     .publicationDate(publicationDto.getPublicationDate())
+                    .language(publicationDto.getLanguage())
+                    .issueNumber(publicationDto.getIssueNumber())
                     .editor(publicationDto.getEditor())
                     .frequency(publicationDto.getFrequency())
-                    .publisher(publicationDto.getPublisher())
                     .build();
 
             publicationRepository.save(periodical);
@@ -63,12 +62,11 @@ public class PublicationService {
         publication.setAuthor(publicationDto.getAuthor());
 
         if(publication instanceof Book book){
-            book.setPublisher(publicationDto.getPublisher());
             book.setIsbn(publicationDto.getIsbn());
             book.setGenre(publicationDto.getGenre());
             book.setPageCount(publicationDto.getPageCount());
             book.setLanguage(publicationDto.getLanguage());
-            book.setPublicationYear(publicationDto.getPublicationYear());
+            book.setPublicationDate(publicationDto.getPublicationDate());
             book.setFormat(publicationDto.getFormat());
             book.setSummary(publicationDto.getSummary());
         } else if(publication instanceof Periodical periodical){
@@ -76,7 +74,6 @@ public class PublicationService {
             periodical.setPublicationDate(publicationDto.getPublicationDate());
             periodical.setEditor(publicationDto.getEditor());
             periodical.setFrequency(publicationDto.getFrequency());
-            periodical.setPublisher(publicationDto.getPublisher());
         }
 
         publicationRepository.save(publication);

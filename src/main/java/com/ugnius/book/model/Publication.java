@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "publications")
 @AllArgsConstructor
@@ -20,4 +22,6 @@ public class Publication {
     protected Long id;
     protected String title;
     protected String author;
+    protected LocalDate publicationDate;
+    protected String language;
 }
