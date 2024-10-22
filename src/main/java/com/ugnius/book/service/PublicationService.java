@@ -1,7 +1,6 @@
 package com.ugnius.book.service;
 
 import com.ugnius.book.dto.PublicationDto;
-import com.ugnius.book.enums.PublicationType;
 import com.ugnius.book.model.*;
 import com.ugnius.book.repository.PublicationRepository;
 import lombok.AllArgsConstructor;
@@ -21,6 +20,10 @@ public class PublicationService {
     public void createPublication(PublicationDto publicationDto) {
         if(publicationRepository.findByTitle(publicationDto.getTitle()).isPresent()){
             throw new IllegalArgumentException("Publication already exists");
+        }
+
+        if(publicationDto.getTitle().isEmpty() || publicationDto.getAuthor().isEmpty() || publicationDto.getPublicationDate() == null){
+            throw new IllegalArgumentException("Missing required fields");
         }
 
         if (publicationDto.getPublicationType() == BOOK) {

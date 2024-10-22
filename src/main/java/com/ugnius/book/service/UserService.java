@@ -25,6 +25,10 @@ public class UserService {
             throw new IllegalArgumentException("User already exists");
         }
 
+        if(userDto.getUsername().isEmpty() || userDto.getPassword().isEmpty() || userDto.getName().isEmpty() || userDto.getSurname().isEmpty()){
+            throw new IllegalArgumentException("Missing required fields");
+        }
+
         if (userDto.getUserType() == CLIENT) {
             Client client = Client.builder()
                     .username(userDto.getUsername())
