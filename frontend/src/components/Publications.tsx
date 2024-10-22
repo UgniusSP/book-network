@@ -7,6 +7,7 @@ const PublicationsPage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [publicationModel, setPublicationModel] = useState<PublicationDto>({
         title: "",
         author: "",
@@ -70,12 +71,12 @@ const PublicationsPage: React.FC = () => {
         try {
             await deletePublication(title);
             setSuccessMessage("Publication deleted successfully!");
-            const updatedPublications = await getAllPublications();
             setPublications(publications.filter((publication) => publication.title !== title));
-        } catch (error: any) {
-            setError(error.message);
+            resetForm();
+        } catch (error) {
+            setError((error as Error).message);
         }
-    }
+    };
 
     const handleEdit = (publication: PublicationDto) => {
         setPublicationModel({
@@ -91,8 +92,9 @@ const PublicationsPage: React.FC = () => {
             editor: publication.editor ?? "",
             frequency: publication.frequency ?? "",
             issueNumber: publication.issueNumber ?? 0,
-            publicationType: "BOOK",
+            publicationType: publication.publicationType,
         });
+        setIsEditing(true);
     };
 
     const resetForm = () => {
@@ -111,6 +113,7 @@ const PublicationsPage: React.FC = () => {
             frequency: "",
             issueNumber: 0
         });
+        setIsEditing(false);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -139,6 +142,7 @@ const PublicationsPage: React.FC = () => {
                             checked={publicationModel.publicationType === "BOOK"}
                             onChange={handleChange}
                             className="mr-2"
+                            disabled={isEditing}
                         />
                         <label className="mr-4">Book</label>
                         <input
@@ -148,6 +152,7 @@ const PublicationsPage: React.FC = () => {
                             onChange={handleChange}
                             checked={publicationModel.publicationType === "PERIODICAL"}
                             className="mr-2"
+                            disabled={isEditing}
                         />
                         <label>Periodical</label>
                     </div>
@@ -320,6 +325,13 @@ const PublicationsPage: React.FC = () => {
                         <div className="flex justify-end space-x-2">
                             <button
                                 type="submit"
+                                onClick={resetForm}
+                                className="bg-gray-400 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded focus:outline-none"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                type="submit"
                                 onClick={handleUpdatePublication}
                                 className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded focus:outline-none"
                             >
@@ -348,6 +360,7 @@ const PublicationsPage: React.FC = () => {
                             <th className="py-3 px-6 border-b text-left">Title</th>
                             <th className="py-3 px-6 border-b text-left">Author</th>
                             <th className="py-3 px-6 border-b text-left">Year</th>
+                            <th className="py-3 px-6 border-b text-left">Publication Type</th>
                             <th className="py-3 px-4 border-b text-left">Actions</th>
                         </tr>
                         </thead>
@@ -359,13 +372,14 @@ const PublicationsPage: React.FC = () => {
                                 <td className="py-2 px-6 border-b text-left">{publication.title}</td>
                                 <td className="py-2 px-6 border-b text-left">{publication.author}</td>
                                 <td className="py-2 px-6 border-b text-left">{publication.publicationDate}</td>
+                                <td className="py-2 px-6 border-b text-left">{publication.publicationType}</td>
                                 <td className="py-3 px-4 border-b">
                                     <button
                                         onClick={() => handleDelete(publication.title)}
                                         className="text-red-500 hover:text-red-700"
                                         title="Delete Publication"
                                     >
-                                        🗑️ {/* Recycle bin icon (Unicode character) */}
+                                        🗑️
                                     </button>
                                 </td>
                             </tr>

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @AllArgsConstructor
@@ -21,5 +23,4 @@ public abstract class User {
     protected String name;
     protected String surname;
     protected String userType;
-
 }

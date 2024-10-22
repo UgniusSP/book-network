@@ -46,4 +46,12 @@ export const updateUser = async (username: any, user: UserDto) => {
     }
 }
 
+export const getUserCount = async (): Promise<number> => {
+    const response = await fetch('http://localhost:8080/users/count');
+    if (!response.ok) {
+        throw new Error('Failed to fetch user count');
+    }
+    return await response.json();
+}
+
 

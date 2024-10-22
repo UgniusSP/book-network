@@ -1,6 +1,7 @@
 package com.ugnius.book.service;
 
 import com.ugnius.book.dto.PublicationDto;
+import com.ugnius.book.enums.PublicationType;
 import com.ugnius.book.model.*;
 import com.ugnius.book.repository.PublicationRepository;
 import lombok.AllArgsConstructor;
@@ -28,6 +29,7 @@ public class PublicationService {
                     .author(publicationDto.getAuthor())
                     .publicationDate(publicationDto.getPublicationDate())
                     .language(publicationDto.getLanguage())
+                    .publicationType(String.valueOf(BOOK))
                     .isbn(publicationDto.getIsbn())
                     .genre(publicationDto.getGenre())
                     .pageCount(publicationDto.getPageCount())
@@ -42,6 +44,7 @@ public class PublicationService {
                     .author(publicationDto.getAuthor())
                     .publicationDate(publicationDto.getPublicationDate())
                     .language(publicationDto.getLanguage())
+                    .publicationType(String.valueOf(PERIODICAL))
                     .issueNumber(publicationDto.getIssueNumber())
                     .editor(publicationDto.getEditor())
                     .frequency(publicationDto.getFrequency())
@@ -94,5 +97,9 @@ public class PublicationService {
         }
 
         publicationRepository.delete(publicationRepository.findByTitle(title).get());
+    }
+
+    public Integer getPublicationCount(){
+        return publicationRepository.findAll().size();
     }
 }

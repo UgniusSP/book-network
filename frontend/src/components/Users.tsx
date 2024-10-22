@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers, createUser, deleteUser, updateUser} from "../api/UserApi";
 import { UserDto } from "../models/UserDto";
+import {useNavigate} from "react-router-dom";
 
 const UsersPage: React.FC = () => {
     const [users, setUsers] = useState<UserDto[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState<boolean>(false);
     const [userModel, setUserModel] = useState<UserDto>({
         username: "",
         address: "",
@@ -66,6 +68,7 @@ const UsersPage: React.FC = () => {
             await deleteUser(username);
             setSuccessMessage("User deleted successfully!");
             setUsers(users.filter((user) => user.username !== username));
+            resetForm();
         } catch (error) {
             setError((error as Error).message);
         }
@@ -82,6 +85,7 @@ const UsersPage: React.FC = () => {
             surname: user.surname,
             userType: user.userType,
         });
+        setIsEditing(true);
     };
 
     const resetForm = () => {
@@ -95,6 +99,7 @@ const UsersPage: React.FC = () => {
             surname: "",
             userType: "CLIENT",
         });
+        setIsEditing(false);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,6 +128,7 @@ const UsersPage: React.FC = () => {
                             checked={userModel.userType === "CLIENT"}
                             onChange={handleChange}
                             className="mr-2"
+                            disabled={isEditing}
                         />
                         <label className="mr-4">Client</label>
                         <input
@@ -132,6 +138,7 @@ const UsersPage: React.FC = () => {
                             onChange={handleChange}
                             checked={userModel.userType === "ADMIN"}
                             className="mr-2"
+                            disabled={isEditing}
                         />
                         <label>Admin</label>
                     </div>
@@ -237,6 +244,13 @@ const UsersPage: React.FC = () => {
 
                 <div className="mt-3 text-right">
                     <div className="flex justify-end space-x-2">
+                        <button
+                            type="submit"
+                            onClick={resetForm}
+                            className="bg-gray-400 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded focus:outline-none"
+                        >
+                            Cancel
+                        </button>
                         <button
                             type="submit"
                             onClick={handleUpdateUser}

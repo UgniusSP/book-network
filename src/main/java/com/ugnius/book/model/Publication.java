@@ -24,4 +24,11 @@ public class Publication {
     protected String author;
     protected LocalDate publicationDate;
     protected String language;
+    protected String publicationType;
+
+    @ManyToOne
+    protected Client client;
+
+    @ManyToOne
+    protected Client borrower;
 }

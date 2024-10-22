@@ -91,4 +91,8 @@ public class UserService {
 
         userRepository.deleteByUsername(username);
     }
+
+    public Integer getUserCount(){
+        return userRepository.findAll().size();
+    }
 }

@@ -58,4 +58,9 @@ public class PublicationController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getPublicationsCount() {
+        return new ResponseEntity<>(publicationService.getPublicationCount(), HttpStatus.OK);
+    }
 }

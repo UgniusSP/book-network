@@ -45,3 +45,11 @@ export const updatePublication = async (title: any, publication: PublicationDto)
         throw new Error('Failed to update publication');
     }
 }
+
+export const getPublicationCount = async (): Promise<number> => {
+    const response = await fetch('http://localhost:8080/publications/count');
+    if (!response.ok) {
+        throw new Error('Failed to fetch publication count');
+    }
+    return await response.json();
+}

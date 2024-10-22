@@ -58,4 +58,9 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Integer> getUsersCount() {
+        return new ResponseEntity<>(userService.getUserCount(), HttpStatus.OK);
+    }
 }
