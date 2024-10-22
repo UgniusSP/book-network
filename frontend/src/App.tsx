@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
-import Users from "./components/Users";
-import Publications from "./components/Publications";
+import Users from "./components/UsersPage";
+import Publications from "./components/PublicationsPage";
 
 const App: React.FC = () => {
     return (

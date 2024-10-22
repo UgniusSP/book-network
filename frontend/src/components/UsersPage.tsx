@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers, createUser, deleteUser, updateUser} from "../api/UserApi";
 import { UserDto } from "../models/UserDto";
-import {useNavigate} from "react-router-dom";
+import { MdDelete } from "react-icons/md";
+
+const defaultUserModel: UserDto = {
+    username: "",
+    address: "",
+    birthdate: "",
+    name: "",
+    password: "",
+    phoneNum: "",
+    surname: "",
+    userType: "CLIENT",
+}
 
 const UsersPage: React.FC = () => {
     const [users, setUsers] = useState<UserDto[]>([]);
@@ -9,16 +20,7 @@ const UsersPage: React.FC = () => {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [userModel, setUserModel] = useState<UserDto>({
-        username: "",
-        address: "",
-        birthdate: "",
-        name: "",
-        password: "",
-        phoneNum: "",
-        surname: "",
-        userType: "CLIENT",
-    });
+    const [userModel, setUserModel] = useState<UserDto>(defaultUserModel);
 
     useEffect(() => {
         const loadUsers = async () => {
@@ -30,7 +32,7 @@ const UsersPage: React.FC = () => {
             }
         };
 
-        loadUsers();
+        loadUsers().then(r => r);
     }, []);
 
     const handleCreateUser = async (e: React.FormEvent) => {
@@ -89,16 +91,7 @@ const UsersPage: React.FC = () => {
     };
 
     const resetForm = () => {
-        setUserModel({
-            username: "",
-            address: "",
-            birthdate: "",
-            name: "",
-            password: "",
-            phoneNum: "",
-            surname: "",
-            userType: "CLIENT",
-        });
+        setUserModel(defaultUserModel);
         setIsEditing(false);
     };
 
@@ -298,7 +291,7 @@ const UsersPage: React.FC = () => {
                                         className="text-red-500 hover:text-red-700"
                                         title="Delete User"
                                     >
-                                        🗑️
+                                        <MdDelete />
                                     </button>
                                 </td>
                             </tr>

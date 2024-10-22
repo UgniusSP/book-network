@@ -1,7 +1,7 @@
 export interface PublicationDto {
     title: string;
     author: string;
-    publicationDate: number;
+    publicationDate: string;
     isbn: string;
     genre: string;
     pageCount: number;

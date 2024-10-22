@@ -24,8 +24,8 @@ const Dashboard: React.FC = () => {
             }
         }
 
-        fetchPublications();
-        fetchUsers()
+        fetchPublications().then(r => r);
+        fetchUsers().then(r =>  r);
     }, []);
 
 

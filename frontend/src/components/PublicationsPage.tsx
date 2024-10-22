@@ -1,6 +1,23 @@
 import {createPublication, deletePublication, updatePublication, getAllPublications} from "../api/PublicationApi";
 import React, {useEffect, useState} from "react";
 import { PublicationDto } from "../models/PublicationDto";
+import { MdDelete } from "react-icons/md";
+
+const defaultPublicationModel: PublicationDto = {
+    title: "",
+    author: "",
+    isbn: "",
+    genre: "",
+    pageCount: 0,
+    language: "",
+    publicationDate: "",
+    format: "",
+    summary: "",
+    editor: "",
+    frequency: "",
+    issueNumber: 0,
+    publicationType: "BOOK",
+}
 
 const PublicationsPage: React.FC = () => {
     const [publications, setPublications] = useState<PublicationDto[]>([]);
@@ -8,21 +25,7 @@ const PublicationsPage: React.FC = () => {
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [formError, setFormError] = useState<string | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [publicationModel, setPublicationModel] = useState<PublicationDto>({
-        title: "",
-        author: "",
-        isbn: "",
-        genre: "",
-        pageCount: 0,
-        language: "",
-        publicationDate: 0,
-        format: "",
-        summary: "",
-        editor: "",
-        frequency: "",
-        issueNumber: 0,
-        publicationType: "BOOK",
-    });
+    const [publicationModel, setPublicationModel] = useState<PublicationDto>(defaultPublicationModel);
 
     useEffect(() => {
         const loadPublications = async () => {
@@ -34,7 +37,7 @@ const PublicationsPage: React.FC = () => {
             }
         };
 
-        loadPublications();
+        loadPublications().then(r => r);
     }, []);
 
     const handleCreatePublication = async (e: React.FormEvent) => {
@@ -98,21 +101,7 @@ const PublicationsPage: React.FC = () => {
     };
 
     const resetForm = () => {
-        setPublicationModel({
-            publicationType: "BOOK",
-            title: "",
-            author: "",
-            isbn: "",
-            genre: "",
-            pageCount: 0,
-            language: "",
-            publicationDate: 0,
-            format: "",
-            summary: "",
-            editor: "",
-            frequency: "",
-            issueNumber: 0
-        });
+        setPublicationModel(defaultPublicationModel);
         setIsEditing(false);
     };
 
@@ -379,7 +368,7 @@ const PublicationsPage: React.FC = () => {
                                         className="text-red-500 hover:text-red-700"
                                         title="Delete Publication"
                                     >
-                                        🗑️
+                                        <MdDelete/>
                                     </button>
                                 </td>
                             </tr>
