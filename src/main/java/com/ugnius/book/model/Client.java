@@ -1,12 +1,15 @@
 package com.ugnius.book.model;
 
+import com.ugnius.book.enums.UserType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -24,4 +27,9 @@ public class Client extends User {
 
     @OneToMany(mappedBy = "borrower")
     private List<Publication> borrowedPublications;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(UserType.CLIENT.name()));
+    }
 }

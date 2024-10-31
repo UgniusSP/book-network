@@ -1,6 +1,6 @@
 package com.ugnius.book.service;
 
-import com.ugnius.book.dto.UserDto;
+import com.ugnius.book.dto.RegisterRequest;
 import com.ugnius.book.model.Admin;
 import com.ugnius.book.model.Client;
 import com.ugnius.book.model.User;
@@ -17,10 +17,11 @@ import static com.ugnius.book.enums.UserType.*;
 @AllArgsConstructor
 public class UserService {
 
+    public static final String USER_NOT_FOUND = "User not found";
     private final UserRepository userRepository;
 
     @Transactional
-    public void createUser(UserDto userDto) {
+    public void createUser(RegisterRequest userDto) {
         if(userRepository.findByUsername(userDto.getUsername()).isPresent()){
             throw new IllegalArgumentException("User already exists");
         }
@@ -57,7 +58,7 @@ public class UserService {
 
     }
 
-    public void updateUser(String username, UserDto userDto){
+    public void updateUser(String username, RegisterRequest userDto){
         if(userRepository.findByUsername(username).isEmpty()){
             throw new IllegalArgumentException("User does not exist");
         }

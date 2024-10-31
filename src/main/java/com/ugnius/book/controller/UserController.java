@@ -1,6 +1,6 @@
 package com.ugnius.book.controller;
 
-import com.ugnius.book.dto.UserDto;
+import com.ugnius.book.dto.RegisterRequest;
 import com.ugnius.book.model.User;
 import com.ugnius.book.service.UserService;
 import lombok.AllArgsConstructor;
@@ -18,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> createUser(@RequestBody RegisterRequest userDto) {
         try {
             userService.createUser(userDto);
             return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping("/{username}")
-    public ResponseEntity<String> updateUser(@PathVariable String username, @RequestBody UserDto userDto) {
+    public ResponseEntity<String> updateUser(@PathVariable String username, @RequestBody RegisterRequest userDto) {
         try {
             userService.updateUser(username, userDto);
             return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
