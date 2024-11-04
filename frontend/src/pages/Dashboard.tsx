@@ -1,33 +1,40 @@
-import React, {useEffect} from 'react';
-import {getPublicationCount} from "../api/PublicationApi";
-import {getUserCount} from "../api/UserApi";
+import React, { useEffect } from 'react';
+import axios from 'axios';
 
 const Dashboard: React.FC = () => {
     const [publications, setPublications] = React.useState<number>(0);
     const [users, setUsers] = React.useState<number>(0);
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchPublications = async () => {
             try {
-                const count = await getPublicationCount();
-                setPublications(count);
-            } catch (e){
+                const response = await axios.get('http://localhost:8080/publications/count', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+                setPublications(response.data);
+            } catch (e) {
                 console.error(e);
             }
         };
         const fetchUsers = async () => {
             try {
-                const count = await getUserCount();
-                setUsers(count);
-            } catch (e){
+                const response = await axios.get('http://localhost:8080/users/count', {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                    }
+                });
+                setUsers(response.data);
+            } catch (e) {
                 console.error(e);
             }
         }
 
-        fetchPublications().then(r => r);
-        fetchUsers().then(r =>  r);
-    }, []);
-
+        fetchPublications();
+        fetchUsers();
+    }, [token]);
 
     return (
         <div>
@@ -45,4 +52,5 @@ const Dashboard: React.FC = () => {
         </div>
     );
 };
+
 export default Dashboard;

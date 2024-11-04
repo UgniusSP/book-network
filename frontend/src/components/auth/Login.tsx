@@ -18,7 +18,7 @@ export const Login: React.FC = () => {
             const response = await axios.post('http://localhost:8080/auth/login', userDto);
 
             setToken(response.data);
-            localStorage.setItem('token', response.data);
+            localStorage.setItem('token', response.data.token);
 
             navigate('/');
         } catch (e) {
