@@ -3,6 +3,7 @@ package com.ugnius.book.service;
 import com.ugnius.book.dto.PublicationDto;
 import com.ugnius.book.model.*;
 import com.ugnius.book.repository.PublicationRepository;
+import com.ugnius.book.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,15 +17,10 @@ import static com.ugnius.book.enums.PublicationType.*;
 public class PublicationService {
 
     private final PublicationRepository publicationRepository;
+    private final UserRepository userRepository;
+    private final JwtService jwtService;
 
-    public void createPublication(PublicationDto publicationDto) {
-        if(publicationRepository.findByTitle(publicationDto.getTitle()).isPresent()){
-            throw new IllegalArgumentException("Publication already exists");
-        }
-
-        if(publicationDto.getTitle().isEmpty() || publicationDto.getAuthor().isEmpty() || publicationDto.getPublicationDate() == null){
-            throw new IllegalArgumentException("Missing required fields");
-        }
+    public void addPublication(PublicationDto publicationDto, String username) {
 
         if (publicationDto.getPublicationType() == BOOK) {
             Book book = Book.builder()
@@ -38,6 +34,7 @@ public class PublicationService {
                     .pageCount(publicationDto.getPageCount())
                     .format(publicationDto.getFormat())
                     .summary(publicationDto.getSummary())
+                    .client((Client) getUser(username))
                     .build();
 
             publicationRepository.save(book);
@@ -51,6 +48,7 @@ public class PublicationService {
                     .issueNumber(publicationDto.getIssueNumber())
                     .editor(publicationDto.getEditor())
                     .frequency(publicationDto.getFrequency())
+                    .client((Client) getUser(username))
                     .build();
 
             publicationRepository.save(periodical);
@@ -104,5 +102,15 @@ public class PublicationService {
 
     public Integer getPublicationCount(){
         return publicationRepository.findAll().size();
+    }
+
+    private User getUser(String username){
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("User does not exist"));
+    }
+
+    private String getUsernameFromToken(String authorizationHeader){
+        String token = authorizationHeader.substring(7);
+        return jwtService.extractUsername(token);
     }
 }

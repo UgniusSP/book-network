@@ -17,10 +17,11 @@ public class PublicationController {
 
     private final PublicationService publicationService;
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createPublication(@RequestBody PublicationDto publicationDto) {
+    @PostMapping("/add/{username}")
+    public ResponseEntity<String> addPublication(@RequestBody PublicationDto publicationDto,
+                                                 @PathVariable String username) {
         try {
-            publicationService.createPublication(publicationDto);
+            publicationService.addPublication(publicationDto, username);
             return new ResponseEntity<>("Publication created successfully", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

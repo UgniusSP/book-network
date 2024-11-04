@@ -1,5 +1,6 @@
 package com.ugnius.book.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +28,10 @@ public class Publication {
     protected String publicationType;
 
     @ManyToOne
+    @JsonIgnore
     protected Client client;
 
     @ManyToOne
+    @JsonIgnore
     protected Client borrower;
 }
