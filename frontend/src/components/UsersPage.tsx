@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAllUsers, createUser, deleteUser, updateUser} from "../api/UserApi";
-import { UserDto } from "../models/UserDto";
+import { UserDto } from "./dto/UserDto";
 import { MdDelete } from "react-icons/md";
 
 const defaultUserModel: UserDto = {

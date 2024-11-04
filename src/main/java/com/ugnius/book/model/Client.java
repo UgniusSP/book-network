@@ -28,6 +28,9 @@ public class Client extends User {
     @OneToMany(mappedBy = "borrower")
     private List<Publication> borrowedPublications;
 
+    @OneToMany(mappedBy = "client")
+    private List<Review> reviews;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(UserType.CLIENT.name()));

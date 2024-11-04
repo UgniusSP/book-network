@@ -11,52 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.ugnius.book.enums.UserType.*;
-
 @Service
 @AllArgsConstructor
 public class UserService {
 
     public static final String USER_NOT_FOUND = "User not found";
     private final UserRepository userRepository;
-
-    @Transactional
-    public void createUser(RegisterRequest userDto) {
-        if(userRepository.findByUsername(userDto.getUsername()).isPresent()){
-            throw new IllegalArgumentException("User already exists");
-        }
-
-        if(userDto.getUsername().isEmpty() || userDto.getPassword().isEmpty() || userDto.getName().isEmpty() || userDto.getSurname().isEmpty()){
-            throw new IllegalArgumentException("Missing required fields");
-        }
-
-        if (userDto.getUserType() == CLIENT) {
-            Client client = Client.builder()
-                    .username(userDto.getUsername())
-                    .password(userDto.getPassword())
-                    .name(userDto.getName())
-                    .surname(userDto.getSurname())
-                    .address(userDto.getAddress())
-                    .birthdate(userDto.getBirthdate())
-                    .userType(String.valueOf(CLIENT))
-                    .build();
-
-            userRepository.save(client);
-        } else if (userDto.getUserType() == ADMIN) {
-            Admin admin = Admin.builder()
-                    .username(userDto.getUsername())
-                    .password(userDto.getPassword())
-                    .name(userDto.getName())
-                    .surname(userDto.getSurname())
-                    .phoneNum(userDto.getPhoneNum())
-                    .userType(String.valueOf(ADMIN))
-                    .build();
-
-            userRepository.save(admin);
-        }
-
-
-    }
 
     public void updateUser(String username, RegisterRequest userDto){
         if(userRepository.findByUsername(username).isEmpty()){
@@ -65,7 +25,6 @@ public class UserService {
 
         var user = userRepository.findByUsername(username).get();
 
-        user.setPassword(userDto.getPassword());
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
 

@@ -1,4 +1,4 @@
-import { UserDto } from "../models/UserDto";
+import { UserDto } from "../components/dto/UserDto";
 
 export const getAllUsers = async (): Promise<UserDto[]> => {
     const response = await fetch("http://localhost:8080/users");
