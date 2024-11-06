@@ -34,26 +34,26 @@ public class PublicationController {
         return new ResponseEntity<>(publications, HttpStatus.OK);
     }
 
-    @GetMapping("/{title}")
-    public ResponseEntity<Publication> getPublication(@PathVariable String title) {
-        Publication publication = publicationService.getPublication(title);
+    @GetMapping("/{id}")
+    public ResponseEntity<Publication> getPublication(@PathVariable Long id) {
+        Publication publication = publicationService.getPublication(id);
         return new ResponseEntity<>(publication, HttpStatus.OK);
     }
 
-    @PutMapping("/{title}")
-    public ResponseEntity<String> updatePublication(@PathVariable String title, @RequestBody PublicationDto publicationDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updatePublication(@PathVariable Long id, @RequestBody PublicationDto publicationDto) {
         try {
-            publicationService.updatePublication(title, publicationDto);
+            publicationService.updatePublication(id, publicationDto);
             return new ResponseEntity<>("Publication updated successfully", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping("/{title}")
-    public ResponseEntity<String> deletePublication(@PathVariable String title) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deletePublication(@PathVariable Long id) {
         try {
-            publicationService.deletePublication(title);
+            publicationService.deletePublication(id);
             return new ResponseEntity<>("Publication deleted successfully", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

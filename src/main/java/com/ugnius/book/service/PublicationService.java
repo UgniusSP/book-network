@@ -38,6 +38,7 @@ public class PublicationService {
                     .format(publicationDto.getFormat())
                     .summary(publicationDto.getSummary())
                     .client((Client) getUser(username))
+                    .isAvailable(true)
                     .build();
 
             publicationRepository.save(book);
@@ -52,6 +53,7 @@ public class PublicationService {
                     .editor(publicationDto.getEditor())
                     .frequency(publicationDto.getFrequency())
                     .client((Client) getUser(username))
+                    .isAvailable(true)
                     .build();
 
             publicationRepository.save(periodical);
@@ -59,12 +61,12 @@ public class PublicationService {
 
     }
 
-    public void updatePublication(String title, PublicationDto publicationDto){
-        if(publicationRepository.findByTitle(title).isEmpty()){
+    public void updatePublication(Long id, PublicationDto publicationDto){
+        if(publicationRepository.findById(id).isEmpty()){
             throw new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST);
         }
 
-        var publication = publicationRepository.findByTitle(title).get();
+        var publication = publicationRepository.findById(id).get();
 
         publication.setAuthor(publicationDto.getAuthor());
 
@@ -90,17 +92,17 @@ public class PublicationService {
         return publicationRepository.findAll();
     }
 
-    public Publication getPublication(String title){
-        return publicationRepository.findByTitle(title).orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
+    public Publication getPublication(Long id){
+        return publicationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
     }
 
     @Transactional
-    public void deletePublication(String title){
-        if(publicationRepository.findByTitle(title).isEmpty()){
+    public void deletePublication(Long id){
+        if(publicationRepository.findById(id).isEmpty()){
             throw new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST);
         }
 
-        publicationRepository.delete(publicationRepository.findByTitle(title).get());
+        publicationRepository.delete(publicationRepository.findById(id).get());
     }
 
     public void borrowPublication(Long id, String authorizationHeader){
@@ -108,11 +110,11 @@ public class PublicationService {
         var publication = publicationRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
 
-        if(publication.isAvailable()){
+        if(publication.isAvailable() && !publication.getClient().getUsername().equals(username)){
             publication.setBorrower((Client) getUser(username));
             publication.setAvailable(false);
         } else {
-            throw new IllegalArgumentException("Publication is not available");
+            throw new IllegalArgumentException("Publication is not available or user cant borrow from himself");
         }
 
         publicationRepository.save(publication);

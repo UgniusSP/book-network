@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import java.time.LocalDate;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "publications")
 @AllArgsConstructor
 @NoArgsConstructor
