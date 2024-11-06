@@ -17,11 +17,11 @@ public class PublicationController {
 
     private final PublicationService publicationService;
 
-    @PostMapping("/add/{username}")
+    @PostMapping("/add")
     public ResponseEntity<String> addPublication(@RequestBody PublicationDto publicationDto,
-                                                 @PathVariable String username) {
+                                                 @RequestHeader ("Authorization") String authorizationHeader) {
         try {
-            publicationService.addPublication(publicationDto, username);
+            publicationService.addPublication(publicationDto, authorizationHeader);
             return new ResponseEntity<>("Publication created successfully", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -60,8 +60,30 @@ public class PublicationController {
         }
     }
 
+    @PostMapping("/borrow/{id}")
+    public ResponseEntity<String> borrowPublication(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+        try {
+            publicationService.borrowPublication(id, authorizationHeader);
+            return new ResponseEntity<>("Publication borrowed successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/return/{id}")
+    public ResponseEntity<String> returnPublication(@PathVariable Long id) {
+        try {
+            publicationService.returnPublication(id);
+            return new ResponseEntity<>("Publication returned successfully", HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/count")
     public ResponseEntity<Integer> getPublicationsCount() {
         return new ResponseEntity<>(publicationService.getPublicationCount(), HttpStatus.OK);
     }
+
+
 }

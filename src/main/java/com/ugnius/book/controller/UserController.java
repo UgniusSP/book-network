@@ -23,6 +23,12 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<User> getUserDetails(@RequestHeader("Authorization") String authorizationHeader) {
+        User user = userService.getUserDetails(authorizationHeader);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @GetMapping("/{username}")
     public ResponseEntity<User> getUser(@PathVariable String username) {
         User user = userService.getUser(username);

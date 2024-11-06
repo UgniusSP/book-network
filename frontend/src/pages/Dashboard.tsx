@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
+import {Header} from "../components/header/Header";
 
 const Dashboard: React.FC = () => {
     const [publications, setPublications] = React.useState<number>(0);
@@ -38,8 +39,8 @@ const Dashboard: React.FC = () => {
 
     return (
         <div>
-            <h2 className="text-2xl font-bold">Dashboard</h2>
-            <div className="grid grid-cols-2 gap-4 my-4">
+            <Header />
+            <div className="grid grid-cols-2 gap-4 my-4 p-4">
                 <div className="p-4 bg-gray-200 rounded shadow">
                     <h3>Total Books Available</h3>
                     <p>{publications}</p>

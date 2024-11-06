@@ -26,6 +26,7 @@ public class Publication {
     protected LocalDate publicationDate;
     protected String language;
     protected String publicationType;
+    protected boolean isAvailable;
 
     @ManyToOne
     @JsonIgnore

@@ -20,7 +20,8 @@ public class PublicationService {
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
-    public void addPublication(PublicationDto publicationDto, String username) {
+    public void addPublication(PublicationDto publicationDto, String authorizationHeader) {
+        String username = getUsernameFromToken(authorizationHeader);
 
         if (publicationDto.getPublicationType() == BOOK) {
             Book book = Book.builder()
@@ -98,6 +99,30 @@ public class PublicationService {
         }
 
         publicationRepository.delete(publicationRepository.findByTitle(title).get());
+    }
+
+    public void borrowPublication(Long id, String authorizationHeader){
+        String username = getUsernameFromToken(authorizationHeader);
+        var publication = publicationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Publication does not exist"));
+
+        if(publication.isAvailable()){
+            publication.setBorrower((Client) getUser(username));
+            publication.setAvailable(false);
+        } else {
+            throw new IllegalArgumentException("Publication is not available");
+        }
+
+        publicationRepository.save(publication);
+    }
+
+    public void returnPublication(Long id){
+        var publication = publicationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Publication does not exist"));
+
+        publication.setBorrower(null);
+        publication.setAvailable(true);
+        publicationRepository.save(publication);
     }
 
     public Integer getPublicationCount(){

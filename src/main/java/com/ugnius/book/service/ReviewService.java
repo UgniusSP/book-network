@@ -44,6 +44,12 @@ public class ReviewService {
         reviewRepository.delete(review);
     }
 
+    public String getReview(Long id){
+        return reviewRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Review does not exist"))
+                .getText();
+    }
+
     private User getUser(String username){
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User does not exist"));

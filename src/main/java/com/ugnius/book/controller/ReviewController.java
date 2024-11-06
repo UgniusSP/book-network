@@ -13,6 +13,11 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<String> getReview(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.getReview(id));
+    }
+
     @PostMapping("/add/{username}")
     public ResponseEntity<String> addReview(@RequestBody ReviewDto reviewDto,
                                             @PathVariable String username,
