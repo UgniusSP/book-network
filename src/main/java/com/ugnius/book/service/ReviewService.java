@@ -9,10 +9,13 @@ import com.ugnius.book.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import static com.ugnius.book.service.UserService.*;
+
 @Service
 @AllArgsConstructor
 public class ReviewService {
 
+    private final static String REVIEW_DOES_NOT_EXIST = "Review does not exist";
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -31,7 +34,7 @@ public class ReviewService {
 
     public void updateReview(ReviewDto reviewDto, Long id){
         var review = reviewRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Review does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException(REVIEW_DOES_NOT_EXIST));
 
         review.setText(reviewDto.getReviewText());
         reviewRepository.save(review);
@@ -39,20 +42,20 @@ public class ReviewService {
 
     public void deleteReview(Long id){
         var review = reviewRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Review does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException(REVIEW_DOES_NOT_EXIST));
 
         reviewRepository.delete(review);
     }
 
     public String getReview(Long id){
         return reviewRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Review does not exist"))
+                .orElseThrow(() -> new IllegalArgumentException(REVIEW_DOES_NOT_EXIST))
                 .getText();
     }
 
     private User getUser(String username){
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("User does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
     }
 
     private String getUsernameFromToken(String authorizationHeader){

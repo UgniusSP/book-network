@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.ugnius.book.enums.PublicationType.*;
+import static com.ugnius.book.service.UserService.*;
 
 @Service
 @AllArgsConstructor
 public class PublicationService {
 
+    private static final String PUBLICATION_DOES_NOT_EXIST = "Publication does not exist";
     private final PublicationRepository publicationRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
@@ -59,7 +61,7 @@ public class PublicationService {
 
     public void updatePublication(String title, PublicationDto publicationDto){
         if(publicationRepository.findByTitle(title).isEmpty()){
-            throw new IllegalArgumentException("Publication does not exist");
+            throw new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST);
         }
 
         var publication = publicationRepository.findByTitle(title).get();
@@ -89,13 +91,13 @@ public class PublicationService {
     }
 
     public Publication getPublication(String title){
-        return publicationRepository.findByTitle(title).orElseThrow(() -> new IllegalArgumentException("Publication does not exist"));
+        return publicationRepository.findByTitle(title).orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
     }
 
     @Transactional
     public void deletePublication(String title){
         if(publicationRepository.findByTitle(title).isEmpty()){
-            throw new IllegalArgumentException("Publication does not exist");
+            throw new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST);
         }
 
         publicationRepository.delete(publicationRepository.findByTitle(title).get());
@@ -104,7 +106,7 @@ public class PublicationService {
     public void borrowPublication(Long id, String authorizationHeader){
         String username = getUsernameFromToken(authorizationHeader);
         var publication = publicationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Publication does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
 
         if(publication.isAvailable()){
             publication.setBorrower((Client) getUser(username));
@@ -118,7 +120,7 @@ public class PublicationService {
 
     public void returnPublication(Long id){
         var publication = publicationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Publication does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
 
         publication.setBorrower(null);
         publication.setAvailable(true);
@@ -131,7 +133,7 @@ public class PublicationService {
 
     private User getUser(String username){
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("User does not exist"));
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
     }
 
     private String getUsernameFromToken(String authorizationHeader){
