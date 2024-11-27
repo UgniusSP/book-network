@@ -17,10 +17,10 @@ public class UserService {
 
     public static final String USER_NOT_FOUND = "User not found";
     private final UserRepository userRepository;
-    private final JwtService jwtService;
+    private final AuthenticationService authenticationService;
 
-    public void updateUser(String username, RegisterRequest userDto) {
-        var user = getUser(username);
+    public void updateUser(RegisterRequest userDto) {
+        var user = authenticationService.getAuthenticatedUser();
 
         user.setName(userDto.getName());
         user.setSurname(userDto.getSurname());
@@ -40,27 +40,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserDetails(String authorizationHeader) {
-        String username = getUsernameFromToken(authorizationHeader);
-        return getUser(username);
-    }
+    public User getUserDetails() {
+        var user = authenticationService.getAuthenticatedUser();
 
-    private String getUsernameFromToken(String authorizationHeader) {
-        String token = authorizationHeader.substring(7);
-        return jwtService.extractUsername(token);
-    }
-
-    public User getUser(String username) {
-        return userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+        return userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
     }
 
     @Transactional
-    public void deleteUser(String username) {
-        if(userRepository.findByUsername(username).isEmpty()){
+    public void deleteUser() {
+        var user = authenticationService.getAuthenticatedUser();
+
+        if(userRepository.findByUsername(user.getUsername()).isEmpty()){
             throw new IllegalArgumentException(USER_NOT_FOUND);
         }
 
-        userRepository.deleteByUsername(username);
+        userRepository.delete(user);
     }
 
     public Integer getUserCount() {

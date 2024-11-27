@@ -20,9 +20,8 @@ public class ReviewController {
 
     @PostMapping("/add/{username}")
     public ResponseEntity<String> addReview(@RequestBody ReviewDto reviewDto,
-                                            @PathVariable String username,
-                                            @RequestHeader("Authorization") String authorizationHeader) {
-        reviewService.addReview(reviewDto, username, authorizationHeader);
+                                            @PathVariable String username) {
+        reviewService.addReview(reviewDto, username);
         return ResponseEntity.ok("Review added successfully");
     }
 

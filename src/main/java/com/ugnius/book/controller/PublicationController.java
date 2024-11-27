@@ -18,10 +18,9 @@ public class PublicationController {
     private final PublicationService publicationService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addPublication(@RequestBody PublicationDto publicationDto,
-                                                 @RequestHeader ("Authorization") String authorizationHeader) {
+    public ResponseEntity<String> addPublication(@RequestBody PublicationDto publicationDto) {
         try {
-            publicationService.addPublication(publicationDto, authorizationHeader);
+            publicationService.addPublication(publicationDto);
             return new ResponseEntity<>("Publication created successfully", HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -61,9 +60,9 @@ public class PublicationController {
     }
 
     @PostMapping("/borrow/{id}")
-    public ResponseEntity<String> borrowPublication(@PathVariable Long id, @RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<String> borrowPublication(@PathVariable Long id) {
         try {
-            publicationService.borrowPublication(id, authorizationHeader);
+            publicationService.borrowPublication(id);
             return new ResponseEntity<>("Publication borrowed successfully", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

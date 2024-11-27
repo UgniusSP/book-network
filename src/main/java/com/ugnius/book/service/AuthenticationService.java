@@ -4,10 +4,12 @@ import com.ugnius.book.dto.AuthenticationRequest;
 import com.ugnius.book.dto.AuthenticationResponse;
 import com.ugnius.book.dto.RegisterRequest;
 import com.ugnius.book.model.Client;
+import com.ugnius.book.model.User;
 import com.ugnius.book.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +51,13 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    public User getAuthenticatedUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            throw new IllegalStateException("Unable to get authenticated user");
+        }
+        return (User) authentication.getPrincipal();
     }
 }

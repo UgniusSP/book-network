@@ -14,7 +14,7 @@ type FormCardProps = {
 export const LoginForm: React.FC<FormCardProps> = ({title, onSubmit, onChange, username, password}) => {
 
     return (
-        <div className="flex justify-center items-center h-screen border">
+        <div className="flex justify-center items-center h-screen">
             <Box className="p-6 bg-gray-100 rounded shadow w-96">
                 <h3 className="text-2xl font-bold mb-4 text-center">{title}</h3>
                 <form onSubmit={onSubmit}>

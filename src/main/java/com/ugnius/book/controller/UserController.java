@@ -24,31 +24,25 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<User> getUserDetails(@RequestHeader("Authorization") String authorizationHeader) {
-        User user = userService.getUserDetails(authorizationHeader);
+    public ResponseEntity<User> getUserDetails() {
+        User user = userService.getUserDetails();
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<User> getUser(@PathVariable String username) {
-        User user = userService.getUser(username);
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
-    @PutMapping("/{username}")
-    public ResponseEntity<String> updateUser(@PathVariable String username, @RequestBody RegisterRequest userDto) {
+    @PutMapping("/user")
+    public ResponseEntity<String> updateUser(@RequestBody RegisterRequest userDto) {
         try {
-            userService.updateUser(username, userDto);
+            userService.updateUser(userDto);
             return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @DeleteMapping("/{username}")
-    public ResponseEntity<String> deleteUser(@PathVariable String username) {
+    @DeleteMapping("/user")
+    public ResponseEntity<String> deleteUser() {
         try {
-            userService.deleteUser(username);
+            userService.deleteUser();
             return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

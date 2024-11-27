@@ -1,5 +1,7 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {CustomButton} from "../buttons/CustomButton";
+import {FaHome, FaRegUserCircle, FaSignOutAlt} from "react-icons/fa";
 
 export const Header: React.FC = () => {
     const navigate = useNavigate();
@@ -9,23 +11,32 @@ export const Header: React.FC = () => {
         navigate('/login');
     };
 
+    const handleAddPublication = () => {
+        navigate('/publications');
+    }
+
+    const handleHome = () => {
+        navigate('/');
+    }
+
+    const handleProfile = () => {
+        navigate('/profile');
+    }
+
     return (
-        <header className="bg-blue-500 text-white p-4 shadow">
+        <header className="bg-white border text-black p-4 shadow">
             <div className="container mx-auto flex justify-between items-center">
-                <h1 className="text-xl font-bold">Book network</h1>
+                <h1 onClick={handleHome} className="text-xl font-bold cursor-pointer">Book network</h1>
                 <nav className="flex items-center space-x-4">
-                    <ul className="flex space-x-4">
+                    <ul className="flex items-center space-x-4">
                         <li>
-                            <Link to="/" className="hover:underline">Home</Link>
+                            <CustomButton text="Add publication" onClick={handleAddPublication}/>
                         </li>
                         <li>
-                            <Link to="/publications" className="hover:underline">My publications</Link>
+                            <FaRegUserCircle onClick={handleProfile} size={30} className="cursor-pointer"/>
                         </li>
                         <li>
-                            <Link to="/profile" className="hover:underline">Profile</Link>
-                        </li>
-                        <li>
-                            <button onClick={handleLogout} className="hover:underline">Logout</button>
+                            <FaSignOutAlt onClick={handleLogout} size={30} className="cursor-pointer"/>
                         </li>
                     </ul>
                 </nav>
