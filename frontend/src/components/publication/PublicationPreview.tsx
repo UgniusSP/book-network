@@ -19,7 +19,7 @@ export const PublicationPreview: React.FC<PublicationPreviewProps> = ({
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/books/${id}`);
+        navigate(`/publications/${id}`);
     };
 
     return (

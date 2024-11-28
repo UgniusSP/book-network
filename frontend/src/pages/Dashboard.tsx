@@ -1,11 +1,11 @@
 import React from 'react';
 import useFetchData from '../hooks/useFetchData';
 import {PublicationPreview} from "../components/publication/PublicationPreview";
-import {CircularProgress} from "@mui/material";
+import {Loader} from "../components/loader/Loader";
 
 const Dashboard: React.FC = () => {
     const token = localStorage.getItem('token');
-    const { data: publications, error: error, loading: loading } = useFetchData(
+    const { data: publications, error, loading } = useFetchData(
         'http://localhost:8080/publications',
         token
     );
@@ -15,9 +15,7 @@ const Dashboard: React.FC = () => {
     }
 
     if (loading) {
-        return <div className="flex justify-center items-center h-screen">
-            <CircularProgress />
-        </div>;
+        return <Loader />;
     }
 
     return (

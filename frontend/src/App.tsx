@@ -5,6 +5,7 @@ import {Login} from "./components/auth/Login";
 import {SignUp} from "./components/auth/SignUp";
 import {PrivateRoute} from "./components/routes/PrivateRoute";
 import {Header} from "./components/header/Header";
+import {BookPage} from "./pages/BookPage";
 
 const App: React.FC = () => {
     return (
@@ -26,6 +27,9 @@ const MainContent: React.FC = () => {
                     <Route path="/register" element={<SignUp/>}/>
                     <Route element={<PrivateRoute/>}>
                         <Route path="/" element={<Dashboard/>}/>
+                    </Route>
+                    <Route element={<PrivateRoute/>}>
+                        <Route path="/publications/:id" element={<BookPage/>}/>
                     </Route>
                 </Routes>
         </>
