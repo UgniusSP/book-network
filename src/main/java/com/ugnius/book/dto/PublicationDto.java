@@ -19,7 +19,6 @@ public class PublicationDto {
     private int pageCount;
     private String format;
     private String summary;
-    private int issueNumber;
-    private String editor;
     private String frequency;
+    private byte[] image;
 }
