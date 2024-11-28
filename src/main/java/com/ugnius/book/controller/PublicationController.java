@@ -81,7 +81,8 @@ public class PublicationController {
 
     @GetMapping("/count")
     public ResponseEntity<Integer> getPublicationsCount() {
-        return new ResponseEntity<>(publicationService.getPublicationCount(), HttpStatus.OK);
+        var response = publicationService.getPublicationCount();
+        return ResponseEntity.ok(response);
     }
 
 

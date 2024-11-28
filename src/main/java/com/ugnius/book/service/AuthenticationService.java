@@ -3,6 +3,7 @@ package com.ugnius.book.service;
 import com.ugnius.book.dto.AuthenticationRequest;
 import com.ugnius.book.dto.AuthenticationResponse;
 import com.ugnius.book.dto.RegisterRequest;
+import com.ugnius.book.exception.AuthenticationException;
 import com.ugnius.book.model.Client;
 import com.ugnius.book.model.User;
 import com.ugnius.book.repository.UserRepository;
@@ -56,7 +57,7 @@ public class AuthenticationService {
     public User getAuthenticatedUser() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
-            throw new IllegalStateException("Unable to get authenticated user");
+            throw new AuthenticationException();
         }
         return (User) authentication.getPrincipal();
     }

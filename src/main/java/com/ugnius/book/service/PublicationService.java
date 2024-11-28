@@ -1,6 +1,7 @@
 package com.ugnius.book.service;
 
 import com.ugnius.book.dto.PublicationDto;
+import com.ugnius.book.exception.PublicationDoesNotExist;
 import com.ugnius.book.model.*;
 import com.ugnius.book.repository.PublicationRepository;
 import lombok.AllArgsConstructor;
@@ -62,11 +63,9 @@ public class PublicationService {
     public void updatePublication(Long id, PublicationDto publicationDto){
         var user = authenticationService.getAuthenticatedUser();
 
-        if(publicationRepository.findById(id).isEmpty()){
-            throw new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST);
-        }
+        doesPublicationExist(id);
 
-        var publication = publicationRepository.findById(id).get();
+        var publication = getPublication(id);
         validateOwnership(user, publication);
 
         publication.setAuthor(publicationDto.getAuthor());
@@ -93,19 +92,13 @@ public class PublicationService {
         return publicationRepository.findAll();
     }
 
-    public Publication getPublication(Long id){
-        return publicationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
-    }
-
     @Transactional
     public void deletePublication(Long id){
         var user = authenticationService.getAuthenticatedUser();
 
-        if(publicationRepository.findById(id).isEmpty()){
-            throw new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST);
-        }
+        doesPublicationExist(id);
 
-        var publication = publicationRepository.findById(id).get();
+        var publication = getPublication(id);
         validateOwnership(user, publication);
 
         publicationRepository.delete(publication);
@@ -114,8 +107,7 @@ public class PublicationService {
     public void borrowPublication(Long id){
         var user = authenticationService.getAuthenticatedUser();
 
-        var publication = publicationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
+        var publication = getPublication(id);
 
         if(publication.isAvailable() && !publication.getClient().getUsername().equals(user.getUsername())){
             publication.setBorrower((Client) user);
@@ -130,10 +122,9 @@ public class PublicationService {
     public void returnPublication(Long id){
         var user = authenticationService.getAuthenticatedUser();
 
-        var publication = publicationRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
+        var publication = getPublication(id);
 
-        validateOwnership(user, publication);
+        validateBorrowOwnership(user, publication);
 
         publication.setBorrower(null);
         publication.setAvailable(true);
@@ -144,9 +135,26 @@ public class PublicationService {
         return publicationRepository.findAll().size();
     }
 
+    public Publication getPublication(Long id){
+        doesPublicationExist(id);
+        return publicationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(PUBLICATION_DOES_NOT_EXIST));
+    }
+
+    private void doesPublicationExist(Long id) {
+        if(publicationRepository.findById(id).isEmpty()){
+            throw new PublicationDoesNotExist();
+        }
+    }
+
     private void validateOwnership(User user, Publication publication) {
         if (!publication.getClient().getId().equals(user.getId())) {
             throw new IllegalArgumentException("You can't edit other user's publication");
+        }
+    }
+
+    private void validateBorrowOwnership(User user, Publication publication) {
+        if (!publication.getBorrower().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("You can't return other user's publication");
         }
     }
 }
