@@ -72,10 +72,6 @@ public class PublicationController {
     @PutMapping("/{id}")
     public ResponseEntity<Publication> updatePublication(
             @PathVariable Long id,
-            @RequestParam("title") String title,
-            @RequestParam("author") String author,
-            @RequestParam("year") LocalDate year,
-            @RequestParam("language") String language,
             @RequestParam("type") String type,
             @RequestParam("isbn") String isbn,
             @RequestParam("genre") String genre,
@@ -86,10 +82,6 @@ public class PublicationController {
             @RequestParam("image") MultipartFile image) {
         try {
             var publicationDto = PublicationDto.builder()
-                    .title(title)
-                    .author(author)
-                    .publicationDate(year)
-                    .language(language)
                     .publicationType(PublicationType.valueOf(type))
                     .isbn(isbn)
                     .genre(genre)

@@ -1,6 +1,7 @@
 import React from 'react';
 import useFetchData from '../hooks/useFetchData';
 import {PublicationPreview} from "../components/publication/PublicationPreview";
+import {CircularProgress} from "@mui/material";
 
 const Dashboard: React.FC = () => {
     const token = localStorage.getItem('token');
@@ -14,12 +15,15 @@ const Dashboard: React.FC = () => {
     }
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div className="flex justify-center items-center h-screen">
+            <CircularProgress />
+        </div>;
     }
 
     return (
-        <div>
-            <div className="grid grid-cols-2 gap-4 my-4 p-4">
+        <div className="my-2 p-4 mx-5">
+            <h1 className="text-2xl font-bold mb-4">Recommended for you</h1>
+            <div className="grid grid-cols-7">
                 {publications.map((publication: any) => (
                     <div key={publication.id}>
                         <PublicationPreview

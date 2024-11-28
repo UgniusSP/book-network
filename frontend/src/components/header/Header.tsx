@@ -25,9 +25,9 @@ export const Header: React.FC = () => {
 
     return (
         <header className="bg-white border text-black p-4 shadow">
-            <div className="container mx-auto flex justify-between items-center">
+            <div className="pl-5 container flex justify-between items-center">
                 <h1 onClick={handleHome} className="text-xl font-bold cursor-pointer text-sky-800">Book network</h1>
-                <nav className="flex items-center space-x-4">
+                <nav className="flex items-center pr-5">
                     <ul className="flex items-center space-x-4">
                         <li>
                             <CustomButton text="Add publication" onClick={handleAddPublication}/>

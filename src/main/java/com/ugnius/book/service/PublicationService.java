@@ -73,19 +73,15 @@ public class PublicationService {
         var publication = getPublication(id);
         validateOwnership(user, publication);
 
-        publication.setAuthor(publicationDto.getAuthor());
         publication.setImage(publicationDto.getImage());
 
         if(publication instanceof Book book){
             book.setIsbn(publicationDto.getIsbn());
             book.setGenre(publicationDto.getGenre());
             book.setPageCount(publicationDto.getPageCount());
-            book.setLanguage(publicationDto.getLanguage());
-            book.setPublicationDate(publicationDto.getPublicationDate());
             book.setFormat(publicationDto.getFormat());
             book.setSummary(publicationDto.getSummary());
         } else if(publication instanceof Periodical periodical){
-            periodical.setPublicationDate(publicationDto.getPublicationDate());
             periodical.setFrequency(publicationDto.getFrequency());
         }
 
