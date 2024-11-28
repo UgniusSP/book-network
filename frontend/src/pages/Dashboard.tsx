@@ -1,40 +1,26 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React from 'react';
+import useFetchData from '../hooks/useFetchData';
 
 const Dashboard: React.FC = () => {
-    const [publications, setPublications] = React.useState<number>(0);
-    const [users, setUsers] = React.useState<number>(0);
     const token = localStorage.getItem('token');
 
-    useEffect(() => {
-        const fetchPublications = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/publications/count', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    }
-                });
-                setPublications(response.data);
-            } catch (e) {
-                console.error(e);
-            }
-        };
-        const fetchUsers = async () => {
-            try {
-                const response = await axios.get('http://localhost:8080/users/count', {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                    }
-                });
-                setUsers(response.data);
-            } catch (e) {
-                console.error(e);
-            }
-        }
+    const { data: publications, error: pubError, loading: pubLoading } = useFetchData(
+        'http://localhost:8080/publications/count',
+        token
+    );
 
-        fetchPublications();
-        fetchUsers();
-    }, [token]);
+    const { data: users, error: userError, loading: userLoading } = useFetchData(
+        'http://localhost:8080/users/count',
+        token
+    );
+
+    if (pubError || userError) {
+        return <div>Error: {pubError || userError}</div>;
+    }
+
+    if (pubLoading || userLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>

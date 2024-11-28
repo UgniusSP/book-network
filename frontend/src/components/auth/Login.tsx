@@ -1,29 +1,18 @@
 import React from 'react';
-import axios from 'axios';
 import {UserDto} from "../dto/UserDto";
 import {LoginForm} from "../forms/LoginForm";
-import {useNavigate} from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 export const Login: React.FC = () => {
     const [userDto, setUserDto] = React.useState<UserDto>({
         username: '',
         password: ''
     });
-    const [token, setToken] = React.useState<string>('');
-    const navigate = useNavigate();
+    const {authenticate, loading, error} = useAuth();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8080/auth/login', userDto);
-
-            setToken(response.data);
-            localStorage.setItem('token', response.data.token);
-
-            navigate('/');
-        } catch (e) {
-            console.error(e);
-        }
+        authenticate('http://localhost:8080/auth/login', userDto, '/');
     }
 
     const handleFieldChange = (field: string, value: string) => {

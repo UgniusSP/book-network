@@ -36,7 +36,7 @@ export const Header: React.FC = () => {
                             <FaRegUserCircle onClick={handleProfile} size={30} className="cursor-pointer"/>
                         </li>
                         <li>
-                            <FaSignOutAlt onClick={handleLogout} size={30} className="cursor-pointer"/>
+                            <FaSignOutAlt onClick={handleLogout} size={30}  className="cursor-pointer"/>
                         </li>
                     </ul>
                 </nav>

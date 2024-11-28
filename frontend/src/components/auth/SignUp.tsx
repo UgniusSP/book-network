@@ -3,6 +3,7 @@ import axios from 'axios';
 import {RegisterForm} from "../forms/RegisterForm";
 import {UserDto} from "../dto/UserDto";
 import {Navigate, useNavigate} from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 export const SignUp: React.FC = () => {
     const [userDto, setUserDto] = React.useState<UserDto>({
@@ -14,21 +15,12 @@ export const SignUp: React.FC = () => {
         birthdate: '',
         userType: 'CLIENT'
     });
-    const [token, setToken] = React.useState<string>('');
-    const navigate = useNavigate();
+    const {authenticate, loading, error} = useAuth();
 
-    const handleSignUp = async (e: React.FormEvent) => {
+    const handleSignUp = (e: React.FormEvent) => {
         e.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8080/auth/register', userDto);
-            setToken(response.data.access);
-            localStorage.setItem('token', response.data.access);
-
-            navigate('/login');
-        } catch (e) {
-            console.error(e);
-        }
-    }
+        authenticate('http://localhost:8080/auth/register', userDto, '/login');
+    };
 
     const handleFieldChange = (field: string, value: string) => {
         setUserDto((prevData) => ({

@@ -8,8 +8,6 @@ export interface PublicationDto {
     language: string;
     format: string;
     summary: string;
-    editor: string;
     frequency: string;
-    issueNumber: number;
     publicationType: string;
 }
