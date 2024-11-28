@@ -9,7 +9,6 @@ export const PublicationDetails: React.FC<PublicationDto> = ({
                                                                  language,
                                                                  publicationType,
                                                                  available,
-                                                                 image,
                                                                  isbn,
                                                                  genre,
                                                                  pageCount,
@@ -28,6 +27,25 @@ export const PublicationDetails: React.FC<PublicationDto> = ({
             </div>
             <div className="mt-5">
                 <p className="text-sm text-slate-600">{summary}</p>
+            </div>
+            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300" />
+            <div>
+                <h1 className="text-lg font-bold">Publication Details</h1>
+                <div className="mt-3">
+                    <span className="text-sm text-slate-600">Publication Date: {publicationDate}</span>
+                    <span className="block text-sm mt-1 text-slate-600">Language: {language}</span>
+                    {publicationType === "BOOK" && (
+                        <>
+                            <span className="block text-sm mt-1 text-slate-600">ISBN: {isbn}</span>
+                            <span className="block text-sm mt-1 text-slate-600">Genre: {genre}</span>
+                            <span className="block text-sm mt-1 text-slate-600">Page Count: {pageCount}</span>
+                            <span className="block text-sm mt-1 text-slate-600">Format: {format}</span>
+                        </>
+                    )}
+                    {publicationType === "PERIODICAL" && (
+                        <span className="block text-sm mt-1 text-slate-600">Frequency: {frequency}</span>
+                    )}
+                </div>
             </div>
         </div>
     );

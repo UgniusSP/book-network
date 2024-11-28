@@ -4,9 +4,9 @@ export interface PublicationDto {
     author: string;
     publicationDate: string;
     language: string;
-    publicationType: string;
+    publicationType?: string;
     available: boolean;
-    image: string;
+    image?: string;
     isbn?: string;
     genre?: string;
     pageCount?: number;

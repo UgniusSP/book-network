@@ -93,7 +93,7 @@ public class PublicationController {
                     .build();
 
             var response = publicationService.updatePublication(id, publicationDto);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }

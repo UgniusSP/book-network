@@ -26,6 +26,7 @@ public class Publication {
     protected String author;
     protected LocalDate publicationDate;
     protected String language;
+    private String summary;
     protected String publicationType;
     protected boolean isAvailable;
 

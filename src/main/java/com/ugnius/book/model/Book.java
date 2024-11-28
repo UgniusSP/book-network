@@ -18,6 +18,5 @@ public class Book extends Publication {
     private String genre;
     private int pageCount;
     private String format;
-    private String summary;
 
 }

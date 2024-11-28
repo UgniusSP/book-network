@@ -50,6 +50,7 @@ public class PublicationService {
                     .author(publicationDto.getAuthor())
                     .publicationDate(publicationDto.getPublicationDate())
                     .language(publicationDto.getLanguage())
+                    .summary(publicationDto.getSummary())
                     .publicationType(String.valueOf(PERIODICAL))
                     .frequency(publicationDto.getFrequency())
                     .image(publicationDto.getImage())
@@ -74,13 +75,13 @@ public class PublicationService {
         validateOwnership(user, publication);
 
         publication.setImage(publicationDto.getImage());
+        publication.setSummary(publicationDto.getSummary());
 
         if(publication instanceof Book book){
             book.setIsbn(publicationDto.getIsbn());
             book.setGenre(publicationDto.getGenre());
             book.setPageCount(publicationDto.getPageCount());
             book.setFormat(publicationDto.getFormat());
-            book.setSummary(publicationDto.getSummary());
         } else if(publication instanceof Periodical periodical){
             periodical.setFrequency(publicationDto.getFrequency());
         }
