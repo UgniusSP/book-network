@@ -1,13 +1,16 @@
 package com.ugnius.book.controller;
 
 import com.ugnius.book.dto.PublicationDto;
+import com.ugnius.book.enums.PublicationType;
 import com.ugnius.book.model.Publication;
 import com.ugnius.book.service.PublicationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -18,12 +21,39 @@ public class PublicationController {
     private final PublicationService publicationService;
 
     @PostMapping("/add")
-    public ResponseEntity<String> addPublication(@RequestBody PublicationDto publicationDto) {
+    public ResponseEntity<Publication> addPublication(
+            @RequestParam("title") String title,
+            @RequestParam("author") String author,
+            @RequestParam("year") LocalDate year,
+            @RequestParam("language") String language,
+            @RequestParam("type") String type,
+            @RequestParam("isbn") String isbn,
+            @RequestParam("genre") String genre,
+            @RequestParam("pageCount") int pageCount,
+            @RequestParam("format") String format,
+            @RequestParam("summary") String summary,
+            @RequestParam("frequency") String frequency,
+            @RequestParam("image") MultipartFile image) {
         try {
-            publicationService.addPublication(publicationDto);
-            return new ResponseEntity<>("Publication created successfully", HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            var publicationDto = PublicationDto.builder()
+                    .title(title)
+                    .author(author)
+                    .publicationDate(year)
+                    .language(language)
+                    .publicationType(PublicationType.valueOf(type))
+                    .isbn(isbn)
+                    .genre(genre)
+                    .pageCount(pageCount)
+                    .format(format)
+                    .summary(summary)
+                    .frequency(frequency)
+                    .image(image.getBytes())
+                    .build();
+
+            var response = publicationService.addPublication(publicationDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -40,12 +70,40 @@ public class PublicationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updatePublication(@PathVariable Long id, @RequestBody PublicationDto publicationDto) {
+    public ResponseEntity<Publication> updatePublication(
+            @PathVariable Long id,
+            @RequestParam("title") String title,
+            @RequestParam("author") String author,
+            @RequestParam("year") LocalDate year,
+            @RequestParam("language") String language,
+            @RequestParam("type") String type,
+            @RequestParam("isbn") String isbn,
+            @RequestParam("genre") String genre,
+            @RequestParam("pageCount") int pageCount,
+            @RequestParam("format") String format,
+            @RequestParam("summary") String summary,
+            @RequestParam("frequency") String frequency,
+            @RequestParam("image") MultipartFile image) {
         try {
-            publicationService.updatePublication(id, publicationDto);
-            return new ResponseEntity<>("Publication updated successfully", HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            var publicationDto = PublicationDto.builder()
+                    .title(title)
+                    .author(author)
+                    .publicationDate(year)
+                    .language(language)
+                    .publicationType(PublicationType.valueOf(type))
+                    .isbn(isbn)
+                    .genre(genre)
+                    .pageCount(pageCount)
+                    .format(format)
+                    .summary(summary)
+                    .frequency(frequency)
+                    .image(image.getBytes())
+                    .build();
+
+            var response = publicationService.updatePublication(id, publicationDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 

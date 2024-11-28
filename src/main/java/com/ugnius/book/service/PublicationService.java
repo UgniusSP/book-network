@@ -21,7 +21,7 @@ public class PublicationService {
     private final PublicationRepository publicationRepository;
     private final AuthenticationService authenticationService;
 
-    public void addPublication(PublicationDto publicationDto) {
+    public Publication addPublication(PublicationDto publicationDto) {
         var user = authenticationService.getAuthenticatedUser();
 
         if (publicationDto.getPublicationType() == BOOK) {
@@ -42,6 +42,8 @@ public class PublicationService {
                     .build();
 
             publicationRepository.save(book);
+
+            return book;
         } else if(publicationDto.getPublicationType() == PERIODICAL) {
             Periodical periodical = Periodical.builder()
                     .title(publicationDto.getTitle())
@@ -56,11 +58,14 @@ public class PublicationService {
                     .build();
 
             publicationRepository.save(periodical);
+
+            return periodical;
         }
 
+        return null;
     }
 
-    public void updatePublication(Long id, PublicationDto publicationDto){
+    public Publication updatePublication(Long id, PublicationDto publicationDto){
         var user = authenticationService.getAuthenticatedUser();
 
         doesPublicationExist(id);
@@ -69,6 +74,7 @@ public class PublicationService {
         validateOwnership(user, publication);
 
         publication.setAuthor(publicationDto.getAuthor());
+        publication.setImage(publicationDto.getImage());
 
         if(publication instanceof Book book){
             book.setIsbn(publicationDto.getIsbn());
@@ -84,6 +90,7 @@ public class PublicationService {
         }
 
         publicationRepository.save(publication);
+        return publication;
     }
 
     public List<Publication> getAllPublications(){

@@ -26,17 +26,17 @@ export const Header: React.FC = () => {
     return (
         <header className="bg-white border text-black p-4 shadow">
             <div className="container mx-auto flex justify-between items-center">
-                <h1 onClick={handleHome} className="text-xl font-bold cursor-pointer">Book network</h1>
+                <h1 onClick={handleHome} className="text-xl font-bold cursor-pointer text-sky-800">Book network</h1>
                 <nav className="flex items-center space-x-4">
                     <ul className="flex items-center space-x-4">
                         <li>
                             <CustomButton text="Add publication" onClick={handleAddPublication}/>
                         </li>
                         <li>
-                            <FaRegUserCircle onClick={handleProfile} size={30} className="cursor-pointer"/>
+                            <FaRegUserCircle onClick={handleProfile} size={30} className="cursor-pointer text-sky-800"/>
                         </li>
                         <li>
-                            <FaSignOutAlt onClick={handleLogout} size={30}  className="cursor-pointer"/>
+                            <FaSignOutAlt onClick={handleLogout} size={30} className="cursor-pointer text-sky-800"/>
                         </li>
                     </ul>
                 </nav>

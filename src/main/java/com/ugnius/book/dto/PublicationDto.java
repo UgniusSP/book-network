@@ -1,6 +1,7 @@
 package com.ugnius.book.dto;
 
 import com.ugnius.book.enums.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@Builder
 public class PublicationDto {
     private String title;
     private String author;

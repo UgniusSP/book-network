@@ -1,38 +1,36 @@
 import React from 'react';
 import useFetchData from '../hooks/useFetchData';
+import {PublicationPreview} from "../components/publication/PublicationPreview";
 
 const Dashboard: React.FC = () => {
     const token = localStorage.getItem('token');
-
-    const { data: publications, error: pubError, loading: pubLoading } = useFetchData(
-        'http://localhost:8080/publications/count',
+    const { data: publications, error: error, loading: loading } = useFetchData(
+        'http://localhost:8080/publications',
         token
     );
 
-    const { data: users, error: userError, loading: userLoading } = useFetchData(
-        'http://localhost:8080/users/count',
-        token
-    );
-
-    if (pubError || userError) {
-        return <div>Error: {pubError || userError}</div>;
+    if (error) {
+        return <div>Error: {error}</div>;
     }
 
-    if (pubLoading || userLoading) {
+    if (loading) {
         return <div>Loading...</div>;
     }
 
     return (
         <div>
             <div className="grid grid-cols-2 gap-4 my-4 p-4">
-                <div className="p-4 bg-gray-200 rounded shadow">
-                    <h3>Total Publications Available</h3>
-                    <p>{publications}</p>
-                </div>
-                <div className="p-4 bg-gray-200 rounded shadow">
-                    <h3>Total Users</h3>
-                    <p>{users}</p>
-                </div>
+                {publications.map((publication: any) => (
+                    <div key={publication.id}>
+                        <PublicationPreview
+                            id={publication.id}
+                            title={publication.title}
+                            author={publication.author}
+                            imageData={publication.image}
+                            available={publication.available}
+                        />
+                    </div>
+                ))}
             </div>
         </div>
     );
