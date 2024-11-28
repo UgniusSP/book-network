@@ -36,4 +36,7 @@ public class Publication {
     @ManyToOne
     @JsonIgnore
     protected Client borrower;
+
+    @Lob
+    protected byte[] image;
 }

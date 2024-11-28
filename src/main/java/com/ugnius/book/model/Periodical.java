@@ -14,7 +14,5 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @SuperBuilder
 public class Periodical extends Publication {
-    private int issueNumber;
-    private String editor;
     private String frequency;
 }

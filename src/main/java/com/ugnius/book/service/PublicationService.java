@@ -36,6 +36,7 @@ public class PublicationService {
                     .pageCount(publicationDto.getPageCount())
                     .format(publicationDto.getFormat())
                     .summary(publicationDto.getSummary())
+                    .image(publicationDto.getImage())
                     .client((Client) user)
                     .isAvailable(true)
                     .build();
@@ -48,9 +49,8 @@ public class PublicationService {
                     .publicationDate(publicationDto.getPublicationDate())
                     .language(publicationDto.getLanguage())
                     .publicationType(String.valueOf(PERIODICAL))
-                    .issueNumber(publicationDto.getIssueNumber())
-                    .editor(publicationDto.getEditor())
                     .frequency(publicationDto.getFrequency())
+                    .image(publicationDto.getImage())
                     .client((Client) user)
                     .isAvailable(true)
                     .build();
@@ -79,9 +79,7 @@ public class PublicationService {
             book.setFormat(publicationDto.getFormat());
             book.setSummary(publicationDto.getSummary());
         } else if(publication instanceof Periodical periodical){
-            periodical.setIssueNumber(publicationDto.getIssueNumber());
             periodical.setPublicationDate(publicationDto.getPublicationDate());
-            periodical.setEditor(publicationDto.getEditor());
             periodical.setFrequency(publicationDto.getFrequency());
         }
 
