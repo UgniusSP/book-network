@@ -1,14 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import useFetchData from "../hooks/useFetchData";
-import {Loader} from "../components/loader/Loader";
-import {useParams} from "react-router-dom";
-import {PublicationDto} from "../dto/PublicationDto";
-import {PublicationDetails} from "../components/publication/PublicationDetails";
+import { Loader } from "../components/loader/Loader";
+import { PublicationDto } from "../dto/PublicationDto";
+import { PublicationDetails } from "../components/publication/PublicationDetails";
+import {useAuth} from "../contexts/AuthContext";
 
-export const PublicationPage = () => {
-    const token = localStorage.getItem("token");
-    const {id = ""} = useParams<{ id: string }>();
-    const {data: fetchedPublication, loading, error} = useFetchData(`http://localhost:8080/publications/${id}`, token);
+export const PublicationPage: React.FC = () => {
+    const { token } = useAuth();
+    const { id = "" } = useParams<{ id: string }>();
+    const { data: fetchedPublication, loading, error } = useFetchData(
+        `http://localhost:8080/publications/${id}`,
+        token
+    );
     const [publication, setPublication] = useState<PublicationDto | null>(null);
 
     useEffect(() => {
@@ -22,7 +26,7 @@ export const PublicationPage = () => {
     }
 
     if (loading) {
-        return <Loader/>;
+        return <Loader />;
     }
 
     return (
@@ -38,7 +42,7 @@ export const PublicationPage = () => {
                     </div>
                 )}
                 <div>
-                    {publication &&
+                    {publication && (
                         <PublicationDetails
                             id={publication.id}
                             title={publication.title}
@@ -54,9 +58,9 @@ export const PublicationPage = () => {
                             format={publication.format}
                             frequency={publication.frequency}
                         />
-                    }
+                    )}
                 </div>
             </div>
         </div>
     );
-}
+};

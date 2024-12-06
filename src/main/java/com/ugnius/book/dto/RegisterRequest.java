@@ -22,7 +22,7 @@ public class RegisterRequest {
     private String address;
     @NotNull
     private LocalDate birthdate;
-    @NotNull
+
     private String phoneNum;
     private UserType userType;
 }
