@@ -9,12 +9,14 @@ import {
     FormControlLabel,
     FormControl,
     FormLabel,
+    Alert,
 } from "@mui/material";
 import {useProtectedAxios} from "../../hooks/useProtectedAxios";
+import usePostData from "../../hooks/usePostData";
 
 export const PublicationAdditionForm: React.FC = () => {
     const axios = useProtectedAxios();
-    const [loading, setLoading] = useState(false);
+    const { loading, error, success, response, postData } = usePostData("/publications/add");
     const [formData, setFormData] = useState<PublicationDto>({
         title: "",
         author: "",
@@ -79,15 +81,8 @@ export const PublicationAdditionForm: React.FC = () => {
             formDataToSubmit.append("image", formData.image);
         }
 
-        try {
-            await axios.post("/publications/add", formDataToSubmit);
-            setLoading(true);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            clearForm();
-            setLoading(false);
-        }
+        await postData(formDataToSubmit);
+        clearForm();
     };
 
     const clearForm = () => {
@@ -108,55 +103,54 @@ export const PublicationAdditionForm: React.FC = () => {
     }
 
     return (
-        <Box
-            className="flex flex-col items-center mt-8"
-            sx={{ maxWidth: 600, margin: "0 auto" }}
-        >
-            <h1 className="text-2xl font-bold mb-4">Add Publication</h1>
+        <div className="flex flex-col items-center gap-4 w-full max-w-4xl mx-auto">
+            <h1 className="text-2xl font-bold mb-1">Add Publication</h1>
+            {error && <Alert severity="error">{error}</Alert>}
+            {success && <Alert severity="success">Publication added successfully!</Alert>}
             <form onSubmit={handleAddPublication}>
-                <FormControl className="mb-4">
+                <FormControl>
                     <FormLabel>Publication Type</FormLabel>
                     <RadioGroup
                         value={formData.publicationType}
                         onChange={(e) => handleChange("publicationType", e.target.value)}
                         row
                     >
-                        <FormControlLabel value="BOOK" control={<Radio />} label="Book" />
-                        <FormControlLabel value="PERIODICAL" control={<Radio />} label="Periodical" />
+                        <FormControlLabel value="BOOK" control={<Radio/>} label="Book"/>
+                        <FormControlLabel value="PERIODICAL" control={<Radio/>} label="Periodical"/>
                     </RadioGroup>
                 </FormControl>
 
                 {/* Common Fields */}
-                <Box className="flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-4 w-full">
                     <TextField
                         label="Title"
                         value={formData.title}
                         onChange={(e) => handleChange("title", e.target.value)}
                         margin="dense"
-                        sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                        sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                     />
                     <TextField
                         label="Author"
                         value={formData.author}
                         onChange={(e) => handleChange("author", e.target.value)}
                         margin="dense"
-                        sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                        sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                     />
                     <TextField
                         label="Publication Date"
                         type="date"
                         value={formData.publicationDate}
                         onChange={(e) => handleChange("publicationDate", e.target.value)}
-                        InputLabelProps={{ shrink: true }}
+                        InputLabelProps={{shrink: true}}
                         margin="dense"
-                        sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                        sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                     />
                     <TextField
                         label="Language"
                         value={formData.language}
                         onChange={(e) => handleChange("language", e.target.value)}
                         margin="dense"
-                        sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                        sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                     />
                     <TextField
                         label="Summary"
@@ -165,9 +159,9 @@ export const PublicationAdditionForm: React.FC = () => {
                         value={formData.summary}
                         onChange={(e) => handleChange("summary", e.target.value)}
                         margin="dense"
-                        sx={{ width: '100%', fontSize: 16, padding: 1 }}
+                        sx={{width: '100%', fontSize: 16, padding: 1}}
                     />
-                </Box>
+                </div>
 
                 {/* Conditional Fields */}
                 {formData.publicationType === "BOOK" && (
@@ -177,14 +171,14 @@ export const PublicationAdditionForm: React.FC = () => {
                             value={formData.isbn}
                             onChange={(e) => handleChange("isbn", e.target.value)}
                             margin="dense"
-                            sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                            sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                         />
                         <TextField
                             label="Genre"
                             value={formData.genre}
                             onChange={(e) => handleChange("genre", e.target.value)}
                             margin="dense"
-                            sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                            sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                         />
                         <TextField
                             label="Page Count"
@@ -192,14 +186,14 @@ export const PublicationAdditionForm: React.FC = () => {
                             value={formData.pageCount || ""}
                             onChange={(e) => handleChange("pageCount", Number(e.target.value))}
                             margin="dense"
-                            sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                            sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                         />
                         <TextField
                             label="Format"
                             value={formData.format}
                             onChange={(e) => handleChange("format", e.target.value)}
                             margin="dense"
-                            sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                            sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                         />
                     </Box>
                 )}
@@ -210,20 +204,20 @@ export const PublicationAdditionForm: React.FC = () => {
                         value={formData.frequency}
                         onChange={(e) => handleChange("frequency", e.target.value)}
                         margin="dense"
-                        sx={{ width: '100%', height: 50, fontSize: 16, padding: 1 }}
+                        sx={{width: '100%', height: 50, fontSize: 16, padding: 1}}
                     />
                 )}
 
                 {/* Image Upload */}
-                <Box className="flex flex-col items-center mt-4">
+                <div className="flex flex-col items-center gap-4 mt-4">
                     <Button variant="contained" component="label" className="mb-2" color="primary">
                         Upload Image
-                        <input type="file" hidden onChange={handleImageChange} />
+                        <input type="file" hidden onChange={handleImageChange}/>
                     </Button>
                     {formData.image && (
                         <p className="text-sm text-gray-500">Selected file: {(formData.image as File).name}</p>
                     )}
-                </Box>
+                </div>
 
                 {/* Submit Button */}
                 <Button
@@ -242,7 +236,7 @@ export const PublicationAdditionForm: React.FC = () => {
                     {loading ? "Submitting..." : "Add Publication"}
                 </Button>
             </form>
-        </Box>
+        </div>
     );
 
 };

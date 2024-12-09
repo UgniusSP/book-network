@@ -11,7 +11,6 @@ import {PublicationAdditionForm} from "./components/publication/PublicationAddit
 
 const App: React.FC = () => {
     return (
-        // Wrap both Router and AuthProvider here
         <Router>
             <AuthProvider>
                 <MainContent />
@@ -38,6 +37,9 @@ const MainContent: React.FC = () => {
                 </Route>
                 <Route element={<PrivateRoute />}>
                     <Route path="/add-publication" element={<PublicationAdditionForm />} />
+                </Route>
+                <Route element={<PrivateRoute />}>
+                    <Route path="/users/:username" element={<Dashboard/>} /> //TODO change to UserPage
                 </Route>
             </Routes>
         </>

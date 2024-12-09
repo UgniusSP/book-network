@@ -1,25 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import useFetchData from "../hooks/useFetchData";
 import { Loader } from "../components/loader/Loader";
 import { PublicationDto } from "../dto/PublicationDto";
 import { PublicationDetails } from "../components/publication/PublicationDetails";
-import {useAuth} from "../contexts/AuthContext";
+import { PublicationPageRightPanel } from "../components/publication/PublicationPageRightPanel";
 
 export const PublicationPage: React.FC = () => {
-    const { token } = useAuth();
     const { id = "" } = useParams<{ id: string }>();
     const { data: fetchedPublication, loading, error } = useFetchData(
-        `http://localhost:8080/publications/${id}`,
-        token
+        `publications/${id}`
+    );
+    const { data: fetchedUser, loading: userLoading, error: userError } = useFetchData(
+        `publications/${id}/owner`
     );
     const [publication, setPublication] = useState<PublicationDto | null>(null);
+    const [username, setUsername] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (fetchedPublication) {
             setPublication(fetchedPublication);
         }
-    }, [fetchedPublication]);
+        if(fetchedUser) {
+            setUsername(fetchedUser);
+        }
+    }, [fetchedPublication, fetchedUser]);
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -27,6 +33,10 @@ export const PublicationPage: React.FC = () => {
 
     if (loading) {
         return <Loader />;
+    }
+
+    const navigateToUser = () => {
+        navigate(`/users/${username}`);
     }
 
     return (
@@ -61,6 +71,7 @@ export const PublicationPage: React.FC = () => {
                     )}
                 </div>
             </div>
+            <PublicationPageRightPanel username={username || ""} handleClick={navigateToUser}/>
         </div>
     );
 };

@@ -1,25 +1,16 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import {useProtectedAxios} from "./useProtectedAxios";
 
-const useFetchData = (endpoint: string, token: string | null) => {
+const useFetchData = (endpoint: string) => {
     const [data, setData] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
+    const axios = useProtectedAxios();
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!token) {
-                setError('Token is required');
-                setLoading(false);
-                return;
-            }
-
             try {
-                const response = await axios.get(endpoint, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                const response = await axios.get(endpoint);
                 setData(response.data);
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'An error occurred');
@@ -29,7 +20,7 @@ const useFetchData = (endpoint: string, token: string | null) => {
         };
 
         fetchData();
-    }, [endpoint, token]);
+    }, [axios, endpoint]);
 
     return { data, error, loading };
 };

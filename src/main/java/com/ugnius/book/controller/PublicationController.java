@@ -129,11 +129,9 @@ public class PublicationController {
         }
     }
 
-    @GetMapping("/count")
-    public ResponseEntity<Integer> getPublicationsCount() {
-        var response = publicationService.getPublicationCount();
-        return ResponseEntity.ok(response);
+    @GetMapping("/{id}/owner")
+    public ResponseEntity<String> getOwner(@PathVariable Long id) {
+        var owner = publicationService.getOwnerUsernameByPublication(id);
+        return ResponseEntity.status(HttpStatus.OK).body(owner);
     }
-
-
 }

@@ -1,6 +1,6 @@
 import React from "react";
-import { FcOk, FcHighPriority } from "react-icons/fc";
-import { PublicationDto } from "../../dto/PublicationDto";
+import {FcOk, FcHighPriority} from "react-icons/fc";
+import {PublicationDto} from "../../dto/PublicationDto";
 
 export const PublicationDetails: React.FC<PublicationDto> = ({
                                                                  title,
@@ -28,7 +28,7 @@ export const PublicationDetails: React.FC<PublicationDto> = ({
             <div className="mt-5">
                 <p className="text-sm text-slate-600">{summary}</p>
             </div>
-            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300" />
+            <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-300"/>
             <div>
                 <h1 className="text-lg font-bold">Publication Details</h1>
                 <div className="mt-3">
@@ -54,7 +54,7 @@ export const PublicationDetails: React.FC<PublicationDto> = ({
 const renderAvailability = (isAvailable: boolean) => {
     return (
         <div className="mt-3 flex items-center gap-1">
-            {isAvailable ? <FcOk /> : <FcHighPriority />}
+            {isAvailable ? <FcOk/> : <FcHighPriority/>}
             <span className={`m-0 ${isAvailable ? 'text-green-500' : 'text-red-500'}`}>
                 {isAvailable ? 'Available' : 'Not Available'}
             </span>

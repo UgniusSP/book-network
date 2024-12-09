@@ -1,25 +1,23 @@
 import { useState } from 'react';
-import axios from 'axios';
+import { useProtectedAxios } from './useProtectedAxios';
 
-const usePostData = (endpoint: string, token: string | null) => {
+const usePostData = (endpoint: string) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<boolean>(false);
     const [response, setResponse] = useState<any>(null);
+    const axios = useProtectedAxios();
 
     const postData = async (data: any) => {
         setLoading(true);
         setError(null);
 
         try {
-            const headers: { [key: string]: string } = {
-                Authorization: `Bearer ${token}`,
-            };
-
+            const headers: { [key: string]: string } = {};
             if (!(data instanceof FormData)) {
                 headers['Content-Type'] = 'application/json';
             }
-            console.log('Sending data:', data);
+
             const res = await axios.post(endpoint, data, { headers });
             setResponse(res.data);
             setSuccess(true);

@@ -133,8 +133,9 @@ public class PublicationService {
         publicationRepository.save(publication);
     }
 
-    public Integer getPublicationCount(){
-        return publicationRepository.findAll().size();
+    public String getOwnerUsernameByPublication(Long id){
+        var publication = getPublication(id);
+        return publication.getClient().getUsername();
     }
 
     public Publication getPublication(Long id){

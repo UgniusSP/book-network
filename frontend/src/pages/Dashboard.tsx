@@ -4,10 +4,8 @@ import {PublicationPreview} from "../components/publication/PublicationPreview";
 import {Loader} from "../components/loader/Loader";
 
 const Dashboard: React.FC = () => {
-    const token = localStorage.getItem('token');
     const { data: publications, error, loading } = useFetchData(
-        'http://localhost:8080/publications',
-        token
+        '/publications'
     );
 
     if (error) {
