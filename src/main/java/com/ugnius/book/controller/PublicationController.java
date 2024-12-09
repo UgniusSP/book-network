@@ -109,7 +109,7 @@ public class PublicationController {
         }
     }
 
-    @PostMapping("/borrow/{id}")
+    @PostMapping("/{id}/borrow")
     public ResponseEntity<String> borrowPublication(@PathVariable Long id) {
         try {
             publicationService.borrowPublication(id);
@@ -119,7 +119,7 @@ public class PublicationController {
         }
     }
 
-    @DeleteMapping("/return/{id}")
+    @DeleteMapping("/{id}/return")
     public ResponseEntity<String> returnPublication(@PathVariable Long id) {
         try {
             publicationService.returnPublication(id);
