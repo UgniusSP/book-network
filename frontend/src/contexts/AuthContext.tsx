@@ -6,11 +6,12 @@ interface AuthContextProps {
     token: string | null;
     authenticate: (url: string, userDto: { username: string; password: string }, redirectPath: string) => Promise<void>;
     logout: () => void;
+    getAccessToken: () => string | null;
     error: string | null;
     loading: boolean;
 }
 
-const AuthContext = createContext<AuthContextProps | undefined>(undefined);
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,6 +27,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setIsAuthenticated(true);
         }
     }, []);
+
+    const getAccessToken = () => token;
 
     const authenticate = async (url: string, userDto: { username: string; password: string }, redirectPath: string) => {
         setLoading(true);
@@ -66,7 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, token, authenticate, logout, error, loading }}>
+        <AuthContext.Provider value={{ isAuthenticated, token, getAccessToken, authenticate, logout, error, loading }}>
             {children}
         </AuthContext.Provider>
     );

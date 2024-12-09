@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 public class Book extends Publication {
     private String isbn;
     private String genre;
-    private int pageCount;
+    private Integer pageCount;
     private String format;
 
 }

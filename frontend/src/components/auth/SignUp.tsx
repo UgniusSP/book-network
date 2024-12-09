@@ -2,6 +2,7 @@ import React from 'react';
 import { RegisterForm } from '../forms/RegisterForm';
 import { UserDto } from '../../dto/UserDto';
 import {useAuth} from "../../contexts/AuthContext";
+import {Loader} from "../loader/Loader";
 
 export const SignUp: React.FC = () => {
     const [userDto, setUserDto] = React.useState<UserDto>({
@@ -43,7 +44,7 @@ export const SignUp: React.FC = () => {
 
     return (
         <>
-            {loading && <p>Loading...</p>}
+            {loading && <Loader/>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <RegisterForm
                 title="Sign Up"

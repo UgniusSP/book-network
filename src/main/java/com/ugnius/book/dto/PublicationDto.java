@@ -18,7 +18,7 @@ public class PublicationDto {
     private PublicationType publicationType;
     private String isbn;
     private String genre;
-    private int pageCount;
+    private Integer pageCount;
     private String format;
     private String summary;
     private String frequency;

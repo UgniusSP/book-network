@@ -24,16 +24,16 @@ public class PublicationController {
     public ResponseEntity<Publication> addPublication(
             @RequestParam("title") String title,
             @RequestParam("author") String author,
-            @RequestParam("year") LocalDate year,
+            @RequestParam("publicationDate") LocalDate year,
             @RequestParam("language") String language,
-            @RequestParam("type") String type,
-            @RequestParam("isbn") String isbn,
-            @RequestParam("genre") String genre,
-            @RequestParam("pageCount") int pageCount,
-            @RequestParam("format") String format,
             @RequestParam("summary") String summary,
-            @RequestParam("frequency") String frequency,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("publicationType") String type,
+            @RequestParam(value = "isbn", required = false) String isbn,
+            @RequestParam(value = "genre", required = false) String genre,
+            @RequestParam(value = "pageCount", required = false) Integer pageCount,
+            @RequestParam(value = "format", required = false) String format,
+            @RequestParam(value = "frequency", required = false) String frequency) {
         try {
             var publicationDto = PublicationDto.builder()
                     .title(title)
@@ -75,7 +75,7 @@ public class PublicationController {
             @RequestParam("type") String type,
             @RequestParam("isbn") String isbn,
             @RequestParam("genre") String genre,
-            @RequestParam("pageCount") int pageCount,
+            @RequestParam("pageCount") Integer pageCount,
             @RequestParam("format") String format,
             @RequestParam("summary") String summary,
             @RequestParam("frequency") String frequency,

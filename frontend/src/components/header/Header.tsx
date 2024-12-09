@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
     };
 
     const handleAddPublication = () => {
-        navigate('/publications');
+        navigate('/add-publication');
     }
 
     const handleHome = () => {

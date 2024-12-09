@@ -7,6 +7,7 @@ import { PrivateRoute } from "./routes/PrivateRoute";
 import { Header } from "./components/header/Header";
 import { PublicationPage } from "./pages/PublicationPage";
 import { AuthProvider } from "./contexts/AuthContext";
+import {PublicationAdditionForm} from "./components/publication/PublicationAdditionForm";
 
 const App: React.FC = () => {
     return (
@@ -34,6 +35,9 @@ const MainContent: React.FC = () => {
                 </Route>
                 <Route element={<PrivateRoute />}>
                     <Route path="/publications/:id" element={<PublicationPage />} />
+                </Route>
+                <Route element={<PrivateRoute />}>
+                    <Route path="/add-publication" element={<PublicationAdditionForm />} />
                 </Route>
             </Routes>
         </>

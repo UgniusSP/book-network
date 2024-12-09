@@ -23,7 +23,7 @@ export const PublicationDetails: React.FC<PublicationDto> = ({
                 <span className="underline"> {author}</span>
             </div>
             <div>
-                {renderAvailability(available)}
+                {renderAvailability(available || false)}
             </div>
             <div className="mt-5">
                 <p className="text-sm text-slate-600">{summary}</p>

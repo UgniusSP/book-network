@@ -10,21 +10,17 @@ const usePostData = (endpoint: string, token: string | null) => {
     const postData = async (data: any) => {
         setLoading(true);
         setError(null);
-        setSuccess(false);
-
-        if (!token) {
-            setError('Token is required');
-            setLoading(false);
-            return;
-        }
 
         try {
-            const res = await axios.post(endpoint, data, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
-            });
+            const headers: { [key: string]: string } = {
+                Authorization: `Bearer ${token}`,
+            };
+
+            if (!(data instanceof FormData)) {
+                headers['Content-Type'] = 'application/json';
+            }
+            console.log('Sending data:', data);
+            const res = await axios.post(endpoint, data, { headers });
             setResponse(res.data);
             setSuccess(true);
         } catch (err) {
@@ -33,6 +29,7 @@ const usePostData = (endpoint: string, token: string | null) => {
             setLoading(false);
         }
     };
+
 
     return { loading, error, success, response, postData };
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button} from "@mui/material";
+import {Box, Button, TextField} from "@mui/material";
 import {TextFieldComp} from "./TextFieldComp";
 import {Link} from "react-router-dom";
 
@@ -32,25 +32,61 @@ export const RegisterForm: React.FC<FormCardProps> = ({
             <Box className="p-6 bg-gray-100 rounded shadow w-96">
                 <h3 className="text-2xl font-bold mb-4 text-center">{title}</h3>
                 <form onSubmit={onSubmit}>
-                    <TextFieldComp label="Username" type="username" value={username}
-                                   onChange={(e) => onChange('username', e.target.value)}/>
-                    <TextFieldComp label="Password" type="password" value={password}
-                                   onChange={(e) => onChange('password', e.target.value)}/>
-                    <TextFieldComp label="Name" type="name" value={name}
-                                   onChange={(e) => onChange('name', e.target.value)}/>
-                    <TextFieldComp label="Surname" type="surname" value={surname}
-                                   onChange={(e) => onChange('surname', e.target.value)}/>
-                    <TextFieldComp label="Address" type="address" value={address}
-                                   onChange={(e) => onChange('address', e.target.value)}/>
-                    <TextFieldComp label="Birthdate" type="birthdate" value={birthdate}
-                                   onChange={(e) => onChange('birthdate', e.target.value)}/>
+                    <TextField
+                        label="Username"
+                        type="username"
+                        value={username}
+                        onChange={(e) => onChange('username', e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <TextField
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => onChange('password', e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <TextField
+                        label="Name"
+                        type="name"
+                        value={name}
+                        onChange={(e) => onChange('name', e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <TextField
+                        label="Surname"
+                        type="surname"
+                        value={surname}
+                        onChange={(e) => onChange('surname', e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <TextField
+                        label="Address"
+                        type="address"
+                        value={address}
+                        onChange={(e) => onChange('address', e.target.value)}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <TextField
+                        label="Birthdate"
+                        type="date"
+                        value={birthdate}
+                        onChange={(e) => onChange('birthdate', e.target.value)}
+                        fullWidth
+                        margin="normal"
+                    />
                     <div className="flex justify-center">
                         <Button variant="contained" color="primary" type="submit">
                             Sign Up
                         </Button>
                     </div>
                     <div className="mt-5 text-center">
-                        <p>Already have an account? <Link to="/login" className="text-blue-500">Sign In</Link></p>
+                    <p>Already have an account? <Link to="/login" className="text-blue-500">Sign In</Link></p>
                     </div>
                 </form>
             </Box>
