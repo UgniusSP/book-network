@@ -24,7 +24,7 @@ export const PublicationPreview: React.FC<PublicationPreviewProps> = ({
 
     return (
         <div
-            className="flex-col w-44 gap-2.5 h-auto relative z-0 rounded-lg transition-all duration-300 hover:scale-105"
+            className="flex-col w-44 gap-2.5 h-auto relative z-0 rounded-lg transition-all duration-300 hover:scale-105 pb-3"
         >
             <img
                 src={`data:image/jpeg;base64,${imageData}`}

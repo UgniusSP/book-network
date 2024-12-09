@@ -23,6 +23,7 @@ export const PublicationPage: React.FC = () => {
             setPublication(fetchedPublication);
         }
         if(fetchedUser) {
+            console.log(fetchedUser);
             setUsername(fetchedUser);
         }
     }, [fetchedPublication, fetchedUser]);
@@ -36,7 +37,7 @@ export const PublicationPage: React.FC = () => {
     }
 
     const navigateToUser = () => {
-        navigate(`/users/${username}`);
+        navigate(`/users/${publication?.id}`);
     }
 
     return (

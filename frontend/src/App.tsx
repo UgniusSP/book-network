@@ -8,6 +8,7 @@ import { Header } from "./components/header/Header";
 import { PublicationPage } from "./pages/PublicationPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import {PublicationAdditionForm} from "./components/publication/PublicationAdditionForm";
+import {ClientPage} from "./pages/ClientPage";
 
 const App: React.FC = () => {
     return (
@@ -39,7 +40,10 @@ const MainContent: React.FC = () => {
                     <Route path="/add-publication" element={<PublicationAdditionForm />} />
                 </Route>
                 <Route element={<PrivateRoute />}>
-                    <Route path="/users/:username" element={<Dashboard/>} /> //TODO change to UserPage
+                    <Route path="/profile" element={<ClientPage title="My profile" />} />
+                </Route>
+                <Route element={<PrivateRoute />}>
+                    <Route path="/users/:publicationId" element={<ClientPage title="Client page" />} />
                 </Route>
             </Routes>
         </>
