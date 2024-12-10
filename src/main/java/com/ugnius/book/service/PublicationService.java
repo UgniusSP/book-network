@@ -96,7 +96,7 @@ public class PublicationService {
         return publicationRepository.findAll();
     }
 
-    public List<Publication> getFilteredPublications(String genre, String language) {
+    public List<Publication> getFilteredPublications(String genre, String language, String publicationType){
         Specification<Publication> spec = Specification.where(null);
 
         if (genre != null && !genre.isEmpty()) {
@@ -105,6 +105,10 @@ public class PublicationService {
 
         if (language != null && !language.isEmpty()) {
             spec = spec.and(BookSpecification.hasLanguage(language));
+        }
+
+        if(publicationType != null && !publicationType.isEmpty()){
+            spec = spec.and(BookSpecification.hasPublicationType(publicationType));
         }
 
         return publicationRepository.findAll(spec);

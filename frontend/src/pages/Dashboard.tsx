@@ -10,10 +10,10 @@ const Dashboard: React.FC = () => {
     const [filteredPublications, setFilteredPublications] = useState(publications);
     const axios = useProtectedAxios();
 
-    const handleFilter = async (genre: string, language: string) => {
+    const handleFilter = async (genre: string, language: string, publicationType: string) => {
         try {
             const response = await axios.get('publications/filter', {
-                params: { genre, language }
+                params: { genre, language, publicationType }
             });
             setFilteredPublications(response.data);
         } catch (error) {

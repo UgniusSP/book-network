@@ -14,4 +14,9 @@ public class BookSpecification {
         return (root, query, criteriaBuilder) ->
                 criteriaBuilder.equal(root.get("language"), language);
     }
+
+    public static Specification<Publication> hasPublicationType(String publicationType) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("publicationType"), publicationType);
+    }
 }
