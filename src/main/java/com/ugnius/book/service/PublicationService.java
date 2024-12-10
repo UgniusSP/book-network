@@ -4,7 +4,9 @@ import com.ugnius.book.dto.PublicationDto;
 import com.ugnius.book.exception.PublicationDoesNotExist;
 import com.ugnius.book.model.*;
 import com.ugnius.book.repository.PublicationRepository;
+import com.ugnius.book.repository.specification.BookSpecification;
 import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,6 +94,20 @@ public class PublicationService {
 
     public List<Publication> getAllPublications(){
         return publicationRepository.findAll();
+    }
+
+    public List<Publication> getFilteredPublications(String genre, String language) {
+        Specification<Publication> spec = Specification.where(null);
+
+        if (genre != null && !genre.isEmpty()) {
+            spec = spec.and(BookSpecification.hasGenre(genre));
+        }
+
+        if (language != null && !language.isEmpty()) {
+            spec = spec.and(BookSpecification.hasLanguage(language));
+        }
+
+        return publicationRepository.findAll(spec);
     }
 
     @Transactional

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -60,6 +61,17 @@ public class PublicationController {
     @GetMapping
     public ResponseEntity<List<Publication>> getAllPublications() {
         List<Publication> publications = publicationService.getAllPublications();
+        return new ResponseEntity<>(publications, HttpStatus.OK);
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<Publication>> getFilteredPublications(
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) String language) {
+        if (genre == null && language == null) {
+            return ResponseEntity.badRequest().body(Collections.emptyList());
+        }
+        List<Publication> publications = publicationService.getFilteredPublications(genre, language);
         return new ResponseEntity<>(publications, HttpStatus.OK);
     }
 
