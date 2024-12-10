@@ -9,6 +9,7 @@ import usePostData from "../hooks/usePostData";
 import {Alert} from "@mui/material";
 import { ConfirmationDialog } from "../components/ConfirmationDialog";
 import { useProtectedAxios } from "../hooks/useProtectedAxios";
+import {ReviewList} from "../components/review/ReviewList";
 
 export const PublicationPage: React.FC = () => {
     const { id = "" } = useParams<{ id: string }>();
@@ -87,46 +88,55 @@ export const PublicationPage: React.FC = () => {
     };
 
     return (
-        <div className="flex pl-5 mt-5 ml-5 mr-10 justify-between gap-14">
-            <div className="flex">
-                {publication?.image && (
-                    <div className="w-56 h-auto flex-shrink-0 mr-2">
-                        <img
-                            src={`data:image/jpeg;base64,${publication.image}`}
-                            alt={publication.title}
-                            className="w-full h-80 rounded-md"
-                        />
-                    </div>
-                )}
-                <div>
-                    {publication && (
-                        <PublicationDetails
-                            id={publication.id}
-                            title={publication.title}
-                            author={publication.author}
-                            available={publication.available}
-                            summary={publication.summary}
-                            publicationDate={publication.publicationDate}
-                            language={publication.language}
-                            publicationType={publication.publicationType}
-                            isbn={publication.isbn}
-                            genre={publication.genre}
-                            pageCount={publication.pageCount}
-                            format={publication.format}
-                            frequency={publication.frequency}
-                        />
+        <div className="pl-5 mt-5 ml-5 mr-10 flex flex-col gap-14">
+            <div className="flex justify-between gap-14">
+                <div className="flex">
+                    {publication?.image && (
+                        <div className="w-56 h-auto flex-shrink-0 mr-2">
+                            <img
+                                src={`data:image/jpeg;base64,${publication.image}`}
+                                alt={publication.title}
+                                className="w-full h-80 rounded-md"
+                            />
+                        </div>
                     )}
+                    <div>
+                        {publication && (
+                            <PublicationDetails
+                                id={publication.id}
+                                title={publication.title}
+                                author={publication.author}
+                                available={publication.available}
+                                summary={publication.summary}
+                                publicationDate={publication.publicationDate}
+                                language={publication.language}
+                                publicationType={publication.publicationType}
+                                isbn={publication.isbn}
+                                genre={publication.genre}
+                                pageCount={publication.pageCount}
+                                format={publication.format}
+                                frequency={publication.frequency}
+                            />
+                        )}
+                    </div>
                 </div>
+                <PublicationPageRightPanel
+                    username={username || ""}
+                    status={borrowed ? "Return" : "Borrow"}
+                    handleClickOnUser={navigateToUser}
+                    handleClickOnBorrow={handleClickOnBorrow}
+                />
             </div>
-            <PublicationPageRightPanel
-                username={username || ""}
-                status={borrowed ? "Return" : "Borrow"}
-                handleClickOnUser={navigateToUser}
-                handleClickOnBorrow={handleClickOnBorrow}
-            />
+
+            {/* Reviews Section */}
+            {publication && (
+                <ReviewList username={String(publication?.id)} requestMapping="publication-review" />
+            )}
+
             {error && <Alert severity="error">{error}</Alert>}
             {success && <Alert severity="success">Publication borrowed successfully!</Alert>}
             {returnSuccess && <Alert severity="success">Publication returned successfully!</Alert>}
+
             {!borrowed ? (
                 <ConfirmationDialog
                     open={open}
@@ -146,4 +156,5 @@ export const PublicationPage: React.FC = () => {
             )}
         </div>
     );
+
 };

@@ -1,23 +1,20 @@
 package com.ugnius.book.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String text;
-    private String reviewer;
-
-    @ManyToOne
-    @JsonIgnore
-    private Client client;
+    protected Long id;
+    protected String text;
+    protected String reviewer;
 }

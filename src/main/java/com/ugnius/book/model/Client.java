@@ -32,7 +32,7 @@ public class Client extends User {
     private List<Publication> borrowedPublications;
 
     @OneToMany(mappedBy = "client")
-    private List<Review> reviews;
+    private List<ClientReview> reviews;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

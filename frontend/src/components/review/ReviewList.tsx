@@ -5,10 +5,11 @@ import { useProtectedAxios } from "../../hooks/useProtectedAxios";
 
 type ReviewListProps = {
     username: string;
+    requestMapping: string;
 };
 
-export const ReviewList: React.FC<ReviewListProps> = ({ username }) => {
-    const { data } = useFetchData(`reviews/${username}/all`);
+export const ReviewList: React.FC<ReviewListProps> = ({ username, requestMapping }) => {
+    const { data } = useFetchData(`${requestMapping}/${username}/all`);
     const [reviews, setReviews] = useState<ReviewDto[]>([]);
     const [text, setText] = useState('');
     const axios = useProtectedAxios();
@@ -23,7 +24,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({ username }) => {
         e.preventDefault();
         const newReview: ReviewDto = { text };
         try {
-            const response = await axios.post(`/reviews/add/${username}`, newReview);
+            const response = await axios.post(`/${requestMapping}/add/${username}`, newReview);
             setReviews([...reviews, response.data]);
             setText('');
         } catch (error) {

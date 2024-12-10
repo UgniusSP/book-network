@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -37,6 +38,9 @@ public class Publication {
     @ManyToOne
     @JsonIgnore
     protected Client borrower;
+
+    @OneToMany(mappedBy = "publication")
+    private List<PublicationReview> reviews;
 
     @Lob
     protected byte[] image;
