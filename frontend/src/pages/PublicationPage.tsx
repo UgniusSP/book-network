@@ -19,9 +19,12 @@ export const PublicationPage: React.FC = () => {
     const { data: fetchedUser, loading: userLoading } = useFetchData(
         `publications/${id}/owner`
     );
+    const { data: fetchedIsBorrowed } = useFetchData(`publications/${id}/is-borrowed`);
     const [publication, setPublication] = useState<PublicationDto | null>(null);
     const [username, setUsername] = useState<string | null>(null);
     const [open, setOpen] = useState<boolean>(false);
+    const [borrowed, setBorrowed] = useState<boolean>(false);
+    const [returnSuccess, setReturnSuccess] = useState<boolean>(false);
     const axios = useProtectedAxios();
     const navigate = useNavigate();
 
@@ -32,7 +35,10 @@ export const PublicationPage: React.FC = () => {
         if(fetchedUser) {
             setUsername(fetchedUser);
         }
-    }, [fetchedPublication, fetchedUser]);
+        if(fetchedIsBorrowed){
+            setBorrowed(fetchedIsBorrowed);
+        }
+    }, [fetchedIsBorrowed, fetchedPublication, fetchedUser]);
 
     if (error) {
         return <div>Error: {error}</div>;
@@ -53,6 +59,8 @@ export const PublicationPage: React.FC = () => {
     const handleConfirmBorrow = () => {
         try {
             postData({});
+            setBorrowed(true);
+            setPublication((prevPublication) => prevPublication ? { ...prevPublication, available: false } : null);
         } catch (e) {
             console.error(e);
         } finally {
@@ -60,18 +68,19 @@ export const PublicationPage: React.FC = () => {
         }
     };
 
-    // const handleReturnBorrow = async () => {
-    //     try {
-    //         await axios.delete(`/publications/${id}/return`);
-    //         setBorrowed(false);
-    //         setReturnSuccess(true);
-    //     } catch (e) {
-    //         console.error(e);
-    //         setReturnSuccess(false);
-    //     } finally {
-    //         setOpen(false);
-    //     }
-    // };
+    const handleReturnBorrow = async () => {
+        try {
+            await axios.delete(`/publications/${id}/return`);
+            setBorrowed(false);
+            setReturnSuccess(true);
+            setPublication((prevPublication) => prevPublication ? { ...prevPublication, available: true } : null);
+        } catch (e) {
+            console.error(e);
+            setReturnSuccess(false);
+        } finally {
+            setOpen(false);
+        }
+    };
 
     const handleClose = () => {
         setOpen(false);
@@ -111,19 +120,30 @@ export const PublicationPage: React.FC = () => {
             </div>
             <PublicationPageRightPanel
                 username={username || ""}
-                status={"Borrow"}
+                status={borrowed ? "Return" : "Borrow"}
                 handleClickOnUser={navigateToUser}
                 handleClickOnBorrow={handleClickOnBorrow}
             />
             {error && <Alert severity="error">{error}</Alert>}
             {success && <Alert severity="success">Publication borrowed successfully!</Alert>}
-            <ConfirmationDialog
-                open={open}
-                title="Confirm Borrow"
-                content="Are you sure you want to borrow this book?"
-                onConfirm={handleConfirmBorrow}
-                onCancel={handleClose}
-            />
+            {returnSuccess && <Alert severity="success">Publication returned successfully!</Alert>}
+            {!borrowed ? (
+                <ConfirmationDialog
+                    open={open}
+                    title="Confirm Borrow"
+                    content="Are you sure you want to borrow this book?"
+                    onConfirm={handleConfirmBorrow}
+                    onCancel={handleClose}
+                />
+            ) : (
+                <ConfirmationDialog
+                    open={open}
+                    title="Confirm Return"
+                    content="Are you sure you want to return this book?"
+                    onConfirm={handleReturnBorrow}
+                    onCancel={handleClose}
+                />
+            )}
         </div>
     );
 };

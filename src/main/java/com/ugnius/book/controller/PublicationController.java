@@ -134,4 +134,10 @@ public class PublicationController {
         var owner = publicationService.getOwnerUsernameByPublication(id);
         return ResponseEntity.status(HttpStatus.OK).body(owner);
     }
+
+    @GetMapping("{id}/is-borrowed")
+    public ResponseEntity<Boolean> isBorrowed(@PathVariable Long id) {
+        var isBorrowed = publicationService.isPublicationBorrowed(id);
+        return ResponseEntity.status(HttpStatus.OK).body(isBorrowed);
+    }
 }

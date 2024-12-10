@@ -121,6 +121,13 @@ public class PublicationService {
         publicationRepository.save(publication);
     }
 
+    public boolean isPublicationBorrowed(Long id){
+        var user = authenticationService.getAuthenticatedUser();
+        var publication = publicationRepository.findByIdAndBorrower(id, (Client) user);
+
+        return publication.isPresent();
+    }
+
     public void returnPublication(Long id){
         var user = authenticationService.getAuthenticatedUser();
 

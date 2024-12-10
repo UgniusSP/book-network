@@ -30,7 +30,7 @@ export const LoginForm: React.FC<FormCardProps> = ({title, onSubmit, onChange, u
                         value={password}
                         onChange={(e) => onChange('password', e.target.value)}
                         fullWidth
-                        margin="dense"
+                        margin="normal"
                     />
                     <div className="flex justify-center">
                         <Button variant="contained" color="primary" type="submit">

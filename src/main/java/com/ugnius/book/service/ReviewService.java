@@ -9,7 +9,7 @@ import com.ugnius.book.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.ugnius.book.service.UserService.USER_NOT_FOUND;
+import static com.ugnius.book.service.ClientService.USER_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
