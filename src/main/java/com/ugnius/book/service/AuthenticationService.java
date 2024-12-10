@@ -4,6 +4,7 @@ import com.ugnius.book.dto.AuthenticationRequest;
 import com.ugnius.book.dto.AuthenticationResponse;
 import com.ugnius.book.dto.RegisterRequest;
 import com.ugnius.book.exception.AuthenticationException;
+import com.ugnius.book.model.Admin;
 import com.ugnius.book.model.Client;
 import com.ugnius.book.model.User;
 import com.ugnius.book.repository.UserRepository;
@@ -27,18 +28,30 @@ public class AuthenticationService {
 
     public void register(RegisterRequest request) {
 
-        var user =
-                Client.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .name(request.getName())
-                .surname(request.getSurname())
-                .address(request.getAddress())
-                .birthdate(request.getBirthdate())
-                .userType(String.valueOf(CLIENT))
-                .build();
-
-        userRepository.save(user);
+        if(request.getUserType() == ADMIN){
+            var user =
+                    Admin.builder()
+                    .username(request.getUsername())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .name(request.getName())
+                    .surname(request.getSurname())
+                    .phoneNum(request.getPhoneNum())
+                    .userType(String.valueOf(ADMIN))
+                    .build();
+            userRepository.save(user);
+        } else if (request.getUserType() == CLIENT){
+            var user =
+                    Client.builder()
+                    .username(request.getUsername())
+                    .password(passwordEncoder.encode(request.getPassword()))
+                    .name(request.getName())
+                    .surname(request.getSurname())
+                    .address(request.getAddress())
+                    .birthdate(request.getBirthdate())
+                    .userType(String.valueOf(CLIENT))
+                    .build();
+            userRepository.save(user);
+        }
     }
 
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -47,7 +60,7 @@ public class AuthenticationService {
         var user =
                 userRepository
                         .findByUsername(request.getUsername())
-                        .orElseThrow(() -> new RuntimeException(ClientService.USER_NOT_FOUND));
+                        .orElseThrow(() -> new RuntimeException(UserService.USER_NOT_FOUND));
 
         var jwtToken = jwtService.generateToken(user);
 

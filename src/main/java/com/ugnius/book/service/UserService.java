@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
-public class ClientService {
+public class UserService {
 
     public static final String USER_NOT_FOUND = "User not found";
     private final UserRepository userRepository;

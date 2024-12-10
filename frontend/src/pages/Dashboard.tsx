@@ -2,6 +2,7 @@ import React from 'react';
 import useFetchData from '../hooks/useFetchData';
 import {PublicationPreview} from "../components/publication/PublicationPreview";
 import {Loader} from "../components/loader/Loader";
+import {AdminPage} from "./AdminPage";
 
 const Dashboard: React.FC = () => {
     const { data: publications, error, loading } = useFetchData(

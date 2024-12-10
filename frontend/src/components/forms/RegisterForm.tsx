@@ -1,7 +1,6 @@
 import React from 'react';
-import {Box, Button, TextField} from "@mui/material";
-import {TextFieldComp} from "./TextFieldComp";
-import {Link} from "react-router-dom";
+import { Box, Button, TextField, FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 type FormCardProps = {
     title: string;
@@ -11,6 +10,8 @@ type FormCardProps = {
     surname?: string;
     address?: string;
     birthdate?: string;
+    phoneNum?: string;
+    userType: string;
     onSubmit: (e: React.FormEvent) => void;
     onChange: (field: string, value: string) => void;
 }
@@ -24,7 +25,9 @@ export const RegisterForm: React.FC<FormCardProps> = ({
                                                           name = '',
                                                           surname = '',
                                                           birthdate = '',
-                                                          address = ''
+                                                          address = '',
+                                                          phoneNum = '',
+                                                          userType
                                                       }) => {
 
     return (
@@ -72,21 +75,43 @@ export const RegisterForm: React.FC<FormCardProps> = ({
                         fullWidth
                         margin="dense"
                     />
-                    <TextField
-                        label="Birthdate"
-                        type="date"
-                        value={birthdate}
-                        onChange={(e) => onChange('birthdate', e.target.value)}
-                        fullWidth
-                        margin="normal"
-                    />
+                    <FormControl component="fieldset" margin="normal">
+                        <RadioGroup
+                            row
+                            value={userType}
+                            onChange={(e) => onChange('userType', e.target.value)}
+                        >
+                            <FormControlLabel value="CLIENT" control={<Radio />} label="Client" />
+                            <FormControlLabel value="ADMIN" control={<Radio />} label="Admin" />
+                        </RadioGroup>
+                    </FormControl>
+                    {userType === 'CLIENT' && (
+                        <TextField
+                            label="Birthdate"
+                            type="date"
+                            value={birthdate}
+                            onChange={(e) => onChange('birthdate', e.target.value)}
+                            fullWidth
+                            margin="normal"
+                        />
+                    )}
+                    {userType === 'ADMIN' && (
+                        <TextField
+                            label="Phone Number"
+                            type="tel"
+                            value={phoneNum}
+                            onChange={(e) => onChange('phoneNum', e.target.value)}
+                            fullWidth
+                            margin="normal"
+                        />
+                    )}
                     <div className="flex justify-center">
                         <Button variant="contained" color="primary" type="submit">
                             Sign Up
                         </Button>
                     </div>
                     <div className="mt-5 text-center">
-                    <p>Already have an account? <Link to="/login" className="text-blue-500">Sign In</Link></p>
+                        <p>Already have an account? <Link to="/login" className="text-blue-500">Sign In</Link></p>
                     </div>
                 </form>
             </Box>

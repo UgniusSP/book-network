@@ -1,8 +1,8 @@
 import React from 'react';
 import { RegisterForm } from '../forms/RegisterForm';
 import { UserDto } from '../../dto/UserDto';
-import {useAuth} from "../../contexts/AuthContext";
-import {Loader} from "../loader/Loader";
+import { useAuth } from '../../contexts/AuthContext';
+import { Loader } from '../loader/Loader';
 
 export const SignUp: React.FC = () => {
     const [userDto, setUserDto] = React.useState<UserDto>({
@@ -12,6 +12,7 @@ export const SignUp: React.FC = () => {
         surname: '',
         address: '',
         birthdate: '',
+        phoneNum: '',
         userType: 'CLIENT'
     });
     const { authenticate, loading, error } = useAuth();
@@ -44,7 +45,7 @@ export const SignUp: React.FC = () => {
 
     return (
         <>
-            {loading && <Loader/>}
+            {loading && <Loader />}
             {error && <p style={{ color: 'red' }}>{error}</p>}
             <RegisterForm
                 title="Sign Up"
@@ -54,6 +55,8 @@ export const SignUp: React.FC = () => {
                 surname={userDto.surname}
                 address={userDto.address}
                 birthdate={userDto.birthdate}
+                phoneNum={userDto.phoneNum}
+                userType={userDto.userType || 'CLIENT'}
                 onSubmit={handleSignUp}
                 onChange={handleFieldChange}
             />

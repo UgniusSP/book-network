@@ -20,9 +20,8 @@ public class RegisterRequest {
     private String surname;
     @NotNull
     private String address;
-    @NotNull
-    private LocalDate birthdate;
 
+    private LocalDate birthdate;
     private String phoneNum;
     private UserType userType;
 }

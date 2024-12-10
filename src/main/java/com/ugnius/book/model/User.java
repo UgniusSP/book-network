@@ -1,11 +1,12 @@
 package com.ugnius.book.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -24,4 +25,5 @@ public abstract class User implements UserDetails {
     protected String name;
     protected String surname;
     protected String userType;
+
 }
