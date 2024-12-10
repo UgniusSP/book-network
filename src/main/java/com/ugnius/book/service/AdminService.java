@@ -1,12 +1,14 @@
 package com.ugnius.book.service;
 
+import com.ugnius.book.dto.ClientDto;
 import com.ugnius.book.model.Admin;
+import com.ugnius.book.model.Client;
 import com.ugnius.book.model.Publication;
-import com.ugnius.book.model.User;
 import com.ugnius.book.repository.PublicationRepository;
 import com.ugnius.book.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,13 +21,15 @@ public class AdminService {
     private final PublicationRepository publicationRepository;
     private final AuthenticationService authenticationService;
 
-    public List<User> getAllUsers(){
+    @Transactional
+    public List<ClientDto> getAllClients(){
         var username = authenticationService.getAuthenticatedUser().getUsername();
         checkIfUserIsAdmin(username);
 
-        return userRepository.findAll();
+        return userRepository.findAllWhereUserTypeIsClient();
     }
 
+    @Transactional
     public List<Publication> getAllPublications(){
         var username = authenticationService.getAuthenticatedUser().getUsername();
         checkIfUserIsAdmin(username);

@@ -6,9 +6,10 @@ import { SignUp } from "./components/auth/SignUp";
 import { PrivateRoute } from "./routes/PrivateRoute";
 import { Header } from "./components/header/Header";
 import { PublicationPage } from "./pages/PublicationPage";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import {PublicationAdditionForm} from "./components/publication/PublicationAdditionForm";
 import {ClientPage} from "./pages/ClientPage";
+import {AdminPage} from "./pages/AdminPage";
 
 const App: React.FC = () => {
     return (
@@ -23,6 +24,7 @@ const App: React.FC = () => {
 const MainContent: React.FC = () => {
     const location = useLocation();
     const hideHeader = location.pathname === '/login' || location.pathname === '/register';
+    const {usertype} = useAuth();
 
     return (
         <>
@@ -31,7 +33,7 @@ const MainContent: React.FC = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<SignUp />} />
                 <Route element={<PrivateRoute />}>
-                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/" element={usertype === 'ADMIN' ? <AdminPage /> : <Dashboard />} />
                 </Route>
                 <Route element={<PrivateRoute />}>
                     <Route path="/publications/:id" element={<PublicationPage />} />

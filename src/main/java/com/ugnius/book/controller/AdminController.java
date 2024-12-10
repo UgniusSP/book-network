@@ -1,14 +1,11 @@
 package com.ugnius.book.controller;
 
+import com.ugnius.book.dto.ClientDto;
 import com.ugnius.book.model.Publication;
-import com.ugnius.book.model.User;
 import com.ugnius.book.service.AdminService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +16,8 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers(){
-        return ResponseEntity.ok(adminService.getAllUsers());
+    public ResponseEntity<List<ClientDto>> getAllUsers(){
+        return ResponseEntity.ok(adminService.getAllClients());
     }
 
     @GetMapping("/publications")
@@ -28,14 +25,14 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllPublications());
     }
 
-    @DeleteMapping("/users")
-    public ResponseEntity<Void> deleteUser(String username){
+    @DeleteMapping("/{username}/users")
+    public ResponseEntity<Void> deleteUser(@PathVariable String username){
         adminService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/publications")
-    public ResponseEntity<Void> deletePublication(Long publicationId){
+    @DeleteMapping("/{publicationId}/publications")
+    public ResponseEntity<Void> deletePublication(@PathVariable Long publicationId){
         adminService.deletePublication(publicationId);
         return ResponseEntity.noContent().build();
     }

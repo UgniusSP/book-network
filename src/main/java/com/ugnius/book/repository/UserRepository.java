@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -32,5 +33,20 @@ public interface UserRepository extends JpaRepository<User, Long> {
     )
     Optional<ClientDto> findClientDetails(@NotNull @Param("username") String username);
 
+    @Transactional
+    @Query("""
+            SELECT new com.ugnius.book.dto.ClientDto(
+                u.username,
+                u.name,
+                u.surname,
+                c.address,
+                c.birthdate
+            )
+            FROM User u
+            JOIN Client c ON u.id = c.id
+            WHERE u.userType = 'CLIENT'
+            """
+    )
+    List<ClientDto> findAllWhereUserTypeIsClient();
 
 }

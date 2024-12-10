@@ -63,8 +63,9 @@ public class AuthenticationService {
                         .orElseThrow(() -> new RuntimeException(UserService.USER_NOT_FOUND));
 
         var jwtToken = jwtService.generateToken(user);
+        var usertype = user.getUserType();
 
-        return AuthenticationResponse.builder().token(jwtToken).build();
+        return AuthenticationResponse.builder().token(jwtToken).usertype(usertype).build();
     }
 
     public User getAuthenticatedUser() {
