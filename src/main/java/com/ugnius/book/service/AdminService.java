@@ -2,8 +2,8 @@ package com.ugnius.book.service;
 
 import com.ugnius.book.dto.ClientDto;
 import com.ugnius.book.model.Admin;
-import com.ugnius.book.model.Client;
 import com.ugnius.book.model.Publication;
+import com.ugnius.book.model.User;
 import com.ugnius.book.repository.PublicationRepository;
 import com.ugnius.book.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -41,8 +41,7 @@ public class AdminService {
         var username = authenticationService.getAuthenticatedUser().getUsername();
         checkIfUserIsAdmin(username);
 
-        var user = userRepository.findByUsername(userToDelete)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+        var user = getUser(userToDelete);
 
         userRepository.delete(user);
     }
@@ -50,19 +49,36 @@ public class AdminService {
     public void deletePublication(Long publicationId){
         var username = authenticationService.getAuthenticatedUser().getUsername();
         checkIfUserIsAdmin(username);
+        isBookAvailable(publicationId);
 
-        var publication = publicationRepository.findById(publicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Publication not found"));
+        var publication = getPublication(publicationId);
 
         publicationRepository.delete(publication);
     }
 
     private void checkIfUserIsAdmin(String username){
-        var user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+        var user = getUser(username);
 
         if(!(user instanceof Admin)){
             throw new IllegalArgumentException("User is not an admin");
         }
+    }
+
+    private void isBookAvailable(Long publicationId){
+        var publication = getPublication(publicationId);
+
+        if(publication.getBorrower() != null){
+            throw new IllegalArgumentException("Book is not available");
+        }
+    }
+
+    private User getUser(String userToDelete) {
+        return userRepository.findByUsername(userToDelete)
+                .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+    }
+
+    private Publication getPublication(Long publicationId) {
+        return publicationRepository.findById(publicationId)
+                .orElseThrow(() -> new IllegalArgumentException("Publication not found"));
     }
 }

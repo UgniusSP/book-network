@@ -1,10 +1,13 @@
 package com.ugnius.book.controller;
 
 import com.ugnius.book.dto.ReviewDto;
+import com.ugnius.book.model.Review;
 import com.ugnius.book.service.ReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/reviews")
@@ -36,6 +39,11 @@ public class ReviewController {
     public ResponseEntity<String> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);
         return ResponseEntity.ok("Review deleted successfully");
+    }
+
+    @GetMapping("/{username}/all")
+    public ResponseEntity<List<Review>> getAllReviewsByClient(@PathVariable String username) {
+        return ResponseEntity.ok(reviewService.getAllReviewsByClient(username));
     }
 
 }

@@ -9,6 +9,8 @@ import com.ugnius.book.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static com.ugnius.book.service.UserService.USER_NOT_FOUND;
 
 @Service
@@ -23,8 +25,10 @@ public class ReviewService {
     public void addReview(ReviewDto reviewDto, String username) {
         var user = authenticationService.getAuthenticatedUser();
 
+        haveClientAlreadyReviewed(user.getUsername());
+
         var review = Review.builder()
-                .text(reviewDto.getReviewText())
+                .text(reviewDto.getText())
                 .client((Client) getUser(username))
                 .reviewer(user.getUsername())
                 .build();
@@ -40,7 +44,7 @@ public class ReviewService {
 
         validateOwnership(user, review);
 
-        review.setText(reviewDto.getReviewText());
+        review.setText(reviewDto.getText());
         reviewRepository.save(review);
     }
 
@@ -61,6 +65,10 @@ public class ReviewService {
                 .getText();
     }
 
+    public List<Review> getAllReviewsByClient(String username){
+        return reviewRepository.findAllByClientUsername(username);
+    }
+
     private void validateOwnership(User user, Review review) {
         if(!review.getClient().getId().equals(user.getId())){
             throw new IllegalStateException("User is not the owner of the review");
@@ -70,5 +78,11 @@ public class ReviewService {
     private User getUser(String username){
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException(USER_NOT_FOUND));
+    }
+
+    private void haveClientAlreadyReviewed(String username) {
+        if (reviewRepository.findByReviewer(username).isPresent()) {
+            throw new IllegalStateException("Client has already reviewed");
+        }
     }
 }

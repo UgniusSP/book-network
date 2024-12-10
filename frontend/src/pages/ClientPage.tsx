@@ -1,22 +1,25 @@
-import React, {useEffect, useState} from 'react';
-import {ClientDetails} from "../components/user/ClientDetails";
+import React, { useEffect, useState } from 'react';
+import { ClientDetails } from "../components/user/ClientDetails";
 import useFetchData from "../hooks/useFetchData";
-import {ClientDto} from "../dto/ClientDto";
+import { ClientDto } from "../dto/ClientDto";
 import { useParams } from 'react-router-dom';
-import {Loader} from "../components/loader/Loader";
+import { Loader } from "../components/loader/Loader";
+import { ReviewList } from "../components/review/ReviewList";
+import { ReviewDto } from "../dto/ReviewDto";
 
 type ClientPageProps = {
     title: string;
-}
+};
 
 export const ClientPage: React.FC<ClientPageProps> = ({ title }) => {
     const { publicationId } = useParams<{ publicationId: string }>();
     const endpoint = publicationId ? `user/${publicationId}` : 'user';
     const { data: fetchedUser, loading: userLoading, error: userError } = useFetchData(endpoint);
     const [client, setClient] = useState<ClientDto | null>(null);
+    const [reviews, setReviews] = useState<ReviewDto[]>([]);
 
     useEffect(() => {
-        if(fetchedUser){
+        if (fetchedUser) {
             setClient(fetchedUser);
         }
     }, [fetchedUser]);
@@ -34,6 +37,7 @@ export const ClientPage: React.FC<ClientPageProps> = ({ title }) => {
                 />
             )}
             {userLoading && <Loader />}
+            {client && reviews && <ReviewList username={client.username} />}
         </div>
     );
 };

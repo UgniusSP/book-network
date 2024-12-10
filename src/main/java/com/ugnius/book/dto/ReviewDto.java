@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReviewDto {
-    private String reviewText;
+    private String text;
 }
