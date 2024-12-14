@@ -39,7 +39,7 @@ public class Publication {
     @JsonIgnore
     protected Client borrower;
 
-    @OneToMany(mappedBy = "publication")
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<PublicationReview> reviews;
 
     @Lob

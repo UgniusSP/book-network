@@ -1,6 +1,7 @@
 package com.ugnius.book.model;
 
 import com.ugnius.book.enums.UserType;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -25,13 +26,13 @@ public class Client extends User {
     private String address;
     private LocalDate birthdate;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Publication> ownedPublications;
 
-    @OneToMany(mappedBy = "borrower")
+    @OneToMany(mappedBy = "borrower", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Publication> borrowedPublications;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<ClientReview> reviews;
 
     @Override

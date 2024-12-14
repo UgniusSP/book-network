@@ -48,7 +48,7 @@ export const AdminPage: React.FC = () => {
                         <p><strong>Address:</strong> {user.address}</p>
                         <p><strong>Birthdate:</strong> {user.birthdate}</p>
                         <p><strong>User Type:</strong> {user.userType}</p>
-                        <button onClick={() => handleDeleteUser(user.id)} className="mt-2 text-red-500">Delete</button>
+                        <button onClick={() => handleDeleteUser(user.username)} className="mt-2 text-red-500">Delete</button>
                     </div>
                 ))}
             </div>
