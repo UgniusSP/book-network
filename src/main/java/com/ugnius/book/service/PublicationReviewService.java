@@ -23,12 +23,15 @@ public class PublicationReviewService {
         var user = authenticationService.getAuthenticatedUser();
         var publication = getPublication(publicationId);
 
-        haveClientAlreadyReviewed(publicationId, user.getUsername());
+        var parentReview = reviewRequest.getParentReviewId() != null ?
+                publicationReviewRepository.findById(reviewRequest.getParentReviewId())
+                        .orElseThrow(() -> new IllegalArgumentException("Parent review not found")) : null;
 
         var review = PublicationReview.builder()
                 .text(reviewRequest.getText())
                 .publication(publication)
                 .reviewer(user.getUsername())
+                .parentReview(parentReview)
                 .build();
 
         publicationReviewRepository.save(review);
@@ -40,7 +43,7 @@ public class PublicationReviewService {
     }
 
     public List<PublicationReview> getAllReviewsByPublication(Long publicationId) {
-        return publicationReviewRepository.findAllByPublicationId(publicationId);
+        return publicationReviewRepository.findAllByPublicationIdAndParentReviewIsNull(publicationId);
     }
 
     private void haveClientAlreadyReviewed(Long publicationId, String username) {

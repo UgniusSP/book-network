@@ -28,4 +28,13 @@ public interface PublicationReviewRepository extends JpaRepository<Review, Long>
     List<PublicationReview> findAllByPublicationId(@NotNull @Param("publicationId") Long publicationId);
 
 
+    @Transactional
+    @Query("""
+        SELECT r
+        FROM PublicationReview r
+        JOIN Publication p ON r.publication.id = p.id
+        WHERE p.id = :publicationId AND r.parentReview IS NULL
+        """
+    )
+    List<PublicationReview> findAllByPublicationIdAndParentReviewIsNull(Long publicationId);
 }

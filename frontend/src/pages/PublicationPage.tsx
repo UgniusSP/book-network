@@ -129,8 +129,8 @@ export const PublicationPage: React.FC = () => {
             </div>
 
             {/* Reviews Section */}
-            {publication && (
-                <ReviewList username={String(publication?.id)} requestMapping="publication-review" />
+            {publication?.id && (
+                <ReviewList variable={publication.id.toString()} requestMapping="publication-review" />
             )}
 
             {error && <Alert severity="error">{error}</Alert>}

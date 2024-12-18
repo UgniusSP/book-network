@@ -1,5 +1,7 @@
 export interface ReviewDto {
-    id?: number;
+    id: number;
     text: string;
-    reviewer?: string;
+    reviewer: string;
+    replies?: ReviewDto[];
+    parentReviewId?: number;
 }

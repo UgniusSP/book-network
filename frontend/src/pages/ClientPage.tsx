@@ -35,7 +35,7 @@ export const ClientPage: React.FC<ClientPageProps> = ({ title }) => {
                 />
             )}
             {userLoading && <Loader />}
-            {client && <ReviewList username={client.username} requestMapping='client-review' />}
+            {client && <ReviewList variable={client.username} requestMapping='client-review' />}
         </div>
     );
 };
