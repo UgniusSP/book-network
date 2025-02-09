@@ -1,14 +1,16 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   servlet:
     multipart:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
   datasource:
-    username: postgres
-    password: postgres
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/coursework
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_DB}
     hikari:
       schema: library
   jpa:
